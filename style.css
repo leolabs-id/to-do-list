@@ -1,1 +1,17 @@
-/* Tampilan utama */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* --- NAV BAR --- */
+.navbar {
+    position: fixed;        /* buat navbar menempel di atas layar */
+    top: 0;                 /* posisi dari atas */
+    left: 0;
+    width: 100%;            /* supaya selebar layar */
+    background-color: white;
+    padding: 20px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+    z-index: 1000;  
+}
