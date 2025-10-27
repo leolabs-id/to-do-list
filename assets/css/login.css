@@ -1,0 +1,84 @@
+/* Styling untuk MAIN CONTENT */
+.login-main {
+    /* Mengambil tinggi penuh viewport agar kartu bisa di tengah */
+    min-height: 100vh; 
+    /* Latar belakang halaman (bisa abu-abu sangat muda) */
+    background-color: #f7f7f7; 
+    display: flex;
+    justify-content: center; /* Tengah horizontal */
+    align-items: center;     /* Tengah vertikal */
+}
+
+/* Styling untuk Kartu Login (Fokus Utama) */
+.login-card {
+    /* Dasar Warna Putih */
+    background-color: #ffffff; 
+    padding: 40px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 400px; /* Batasi lebar kartu */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Bayangan lembut */
+    text-align: center;
+}
+
+.login-card h2 {
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 1.8rem;
+}
+
+.login-card p {
+    color: #666;
+    margin-bottom: 30px;
+}
+
+/* Styling untuk Form dan Input */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.input-group {
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #444;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    box-sizing: border-box; /* Agar padding tidak menambah lebar total */
+}
+
+.input-group input:focus {
+    border-color: #007bff; /* Border biru saat fokus */
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+}
+
+/* Styling untuk Tombol MASUK */
+.btn-masuk {
+    background-color: #007bff; /* Warna biru cerah */
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-masuk:hover {
+    background-color: #0056b3; /* Biru lebih gelap saat hover */
+}
