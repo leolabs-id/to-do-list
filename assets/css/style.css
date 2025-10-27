@@ -219,6 +219,14 @@ body {
     transform: scale(0.99);
 }
 
+.task-list{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+}
 
 .task-card-container {
     /* Kunci 3: Mengambil SEMUA ruang vertikal yang tersisa */
