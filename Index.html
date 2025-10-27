@@ -3,38 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi To-Do List Sederhana</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/login.css">
-    <title>Login</title>
 </head>
 <body>
-    <header class="header">
-        <div class="header-container">
-            <p class="welcome-text">Welcome to To-Do List App</p>
-        </div>        
-    </header>
 
-    <main class="login-main">
-        <div class="login-card">
-            <h2>Selamat Datang</h2>
+    <div id="loginModal" class="modal-backdrop">
+        <div class="modal-content">
+            
+            <h3 class="form-title">To-Do List App</h3>
             <p>Silakan masukkan data diri Anda untuk melanjutkan.</p>
 
-            <form class="login-form">
-                <div class="input-group">
-                    <label for="nama">Nama Lengkap</label>
-                    <input type="text" id="nama" name="nama" required>
-                </div>
-                
-                <div class="input-group">
-                    <label for="jabatan">Jabatan / Posisi</label>
-                    <input type="text" id="jabatan" name="jabatan" required>
-                </div>
-
+            <form id="login-form"> 
+                    <input type="text" class="input-group" id="nama" name="nama" placeholder="Nama Lengkap" required>
+                    <input type="text" class="input-group" id="jabatan" name="jabatan" placeholder="Jabatan / Posisi" required>
                 <button type="submit" class="btn-masuk">MASUK</button>
             </form>
         </div>
-    </main>
+    </div>
 
-    <script src="script.js"></script>
+    <header class="header">
+        <div class="header-container">
+            <div class="user-info">
+                <img src="assets/img/avatar.png" class="user-avatar" alt=""/> 
+                <div>
+                    <p id="welcomeNamaDisplay" class="welcome-text">Welcome back, Guest</p>
+                    <p id="userJabatanDisplay" class="user-role">-------</p> 
+                </div>
+            </div>
+
+            <div class="global-actions">
+                <time id="tampilTanggal" datetime="2025-10-25" class="datetime-info">Senin, 25 Oktober 2025</time>
+                <nav class="main-menu-nav">
+                    <button class="menu-toggle">☰</button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="task-board">
+            <section class="task-column to-do">
+                <div class="add-task">
+                    <h2>Add new task +</h2>
+                </div>
+                <div class="task-list">
+                    <h2>To Do</h2>
+                    <!-- Nanti isi kartu tugas di sini -->
+                </div>  
+            </section>
+            <!-- Kolom 2: In Progress -->
+            <section class="task-column in-progress">
+                <h2>In Progress</h2>
+                <!-- Isi kartu tugas -->
+            </section>
+
+            <!-- Kolom 3: Done -->
+            <section class="task-column done">
+                <h2>Done</h2>
+                <!-- Isi kartu tugas -->
+            </section>
+        </div>
+    </main>
 </body>
+    
+    <script src="assets/script/script.js"></script>
 </html>

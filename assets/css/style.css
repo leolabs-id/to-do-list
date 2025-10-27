@@ -13,6 +13,63 @@ body {
     padding: 0;
 }
 
+
+
+/* ===================================== */
+/* 1. GAYA MODAL BACKDROP (Layar Penuh) */
+/* ===================================== */
+
+.modal-backdrop {
+    /* POSISI: Memaksa modal tetap di viewport (tidak ikut scroll) */
+    position: fixed; 
+    top: 0;
+    left: 0;
+    
+    /* UKURAN: Menutupi seluruh layar */
+    width: 100%;
+    height: 100%;
+    
+    /* LAPISAN: Pastikan di atas elemen lain (z-index tinggi) */
+    z-index: 1000;
+    
+    /* VISUAL: Latar belakang transparan gelap */
+    background-color: rgba(0, 0, 0, 0.9); 
+    
+    /* TATA LETAK: Menggunakan Flexbox untuk menengahkan konten */
+    display: flex;
+    justify-content: center; /* Tengah horizontal */
+    align-items: center;     /* Tengah vertikal */
+}
+
+/* ===================================== */
+/* 2. KONTEN MODAL (Kartu Putih) */
+/* ===================================== */
+
+.modal-content {
+    background-color: #ffffff; 
+    padding: 40px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px; 
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); /* Bayangan yang jelas */
+    text-align: center;
+}
+
+/* ===================================== */
+/* 3. KELAS PENYEMBUNYI (Digunakan oleh JS) */
+/* ===================================== */
+
+.hidden {
+    /* Kunci yang akan digunakan JavaScript untuk menyembunyikan elemen */
+    display: none !important; 
+}
+
+
+
+
+
+
+
 /* Header */
 .header {
     padding: 20px 0;
@@ -34,11 +91,25 @@ body {
     gap: 16px;
 }
 
+.text-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+}
+
 .welcome-text {
     font-size: 1.25rem;
     font-weight: 600;
     margin: 0;
     color: #e0e0e0;
+}
+
+.user-role {
+    font-size: 0.875rem;
+    color: #e0e0e0;
+    margin: 0;
+    line-height: 1; /* Mengatur jarak antara baris */
 }
 
 .user-avatar {

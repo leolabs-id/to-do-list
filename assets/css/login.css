@@ -1,42 +1,12 @@
-/* Styling untuk MAIN CONTENT */
-.login-main {
-    /* Mengambil tinggi penuh viewport agar kartu bisa di tengah */
-    min-height: 100vh; 
-    /* Latar belakang halaman (bisa abu-abu sangat muda) */
-    background-color: #f7f7f7; 
-    display: flex;
-    justify-content: center; /* Tengah horizontal */
-    align-items: center;     /* Tengah vertikal */
-}
+/* ===================================== */
+/* GAYA UNTUK FORM & INPUT */
+/* ===================================== */
 
-/* Styling untuk Kartu Login (Fokus Utama) */
-.login-card {
-    /* Dasar Warna Putih */
-    background-color: #ffffff; 
-    padding: 40px;
-    border-radius: 12px;
-    width: 100%;
-    max-width: 400px; /* Batasi lebar kartu */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Bayangan lembut */
-    text-align: center;
-}
-
-.login-card h2 {
-    color: #333;
-    margin-bottom: 10px;
-    font-size: 1.8rem;
-}
-
-.login-card p {
-    color: #666;
-    margin-bottom: 30px;
-}
-
-/* Styling untuk Form dan Input */
-.login-form {
+#login-form {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 15px; /* Jarak vertikal antar grup input */
+    margin-top: 25px;
 }
 
 .input-group {
@@ -45,29 +15,50 @@
 
 .input-group label {
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 5px;
     font-weight: 600;
-    color: #444;
+    color: #444; /* Abu-abu gelap agar terbaca di modal putih */
+    font-size: 0.95rem;
 }
 
-.input-group input {
+/* Penataan gaya untuk kotak input */
+#login-form input[type="text"] {
     width: 100%;
-    padding: 12px;
+    padding: 10px;
     border: 1px solid #ddd;
     border-radius: 6px;
     font-size: 1rem;
-    box-sizing: border-box; /* Agar padding tidak menambah lebar total */
+    box-sizing: border-box; /* Memastikan padding tidak menambah lebar */
+    transition: border-color 0.2s ease;
 }
 
-.input-group input:focus {
-    border-color: #007bff; /* Border biru saat fokus */
+/* Efek fokus pada input */
+#login-form input[type="text"]:focus {
+    border-color: #007bff; /* Border biru saat input dipilih */
     outline: none;
     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
 }
 
-/* Styling untuk Tombol MASUK */
+/* Judul formulir di modal */
+.form-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.login-card p {
+    color: #666;
+    margin-bottom: 25px;
+}
+
+/* ===================================== */
+/* GAYA UNTUK BUTTON MASUK */
+/* ===================================== */
+
 .btn-masuk {
-    background-color: #007bff; /* Warna biru cerah */
+    /* Dasar Tombol */
+    background-color: #007bff; /* Abu-abu gelap */
     color: white;
     padding: 12px 20px;
     border: none;
@@ -75,10 +66,22 @@
     cursor: pointer;
     font-size: 1.1rem;
     font-weight: 700;
-    margin-top: 10px;
-    transition: background-color 0.3s ease;
+    margin-top: 20px;
+    width: 100%; /* Membuat tombol selebar input */
+    
+    /* Transisi untuk efek halus */
+    transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
+/* Efek saat Kursor Di Atas Tombol (Hover) */
 .btn-masuk:hover {
-    background-color: #0056b3; /* Biru lebih gelap saat hover */
+    background-color: #0069d9; /* Sedikit lebih terang */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Efek saat Tombol Diklik/Ditekan (Active) */
+.btn-masuk:active {
+    background-color: #005cbf; /* Lebih gelap untuk efek "ditekan" */
+    transform: scale(0.99); /* Sedikit mengecil */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
