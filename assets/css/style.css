@@ -9,14 +9,15 @@
 html, body {
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
-    margin: 0 auto;
-    padding: 0;
-    height: 100%;
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
 }
 
 body {
     display: flex;
     flex-direction: column;
+    min-height: 100vh;
 }
 
 
@@ -78,6 +79,7 @@ body {
     padding: 20px 0;
     background-color: #181818;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    flex-shrink: 0;
 }
 
 .header-container {
@@ -148,10 +150,13 @@ body {
 /* Main Content */
 .main-content {
     background-color: #fafafa;
-    padding: 40px 0;
-    flex-grow: 1;
+    padding: 0;
+    flex: 1 1 auto; 
     flex-direction: column;
     display: flex;
+    min-height: 0;
+    overflow: hidden;
+    
     
 }
 
@@ -159,10 +164,13 @@ body {
     max-width: 1200px;
     width: 100%;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 40px 20px;
     display: flex;
-    flex-grow: 1;
+    flex: 1;
     gap: 20px;
+    min-height: 0;
+    overflow: hidden;
+    height: 100%;
 }
 
 .task-column {
@@ -173,8 +181,9 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
-    gap: 20px;
     height: 100%;
+    min-height: 0;
+    overflow: hidden;
 }
 
 .add-task {
@@ -185,6 +194,7 @@ body {
     text-align: center;
     cursor: pointer;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); 
+    margin-bottom: 10px;
 }
 
 .add-task h2 {
@@ -208,6 +218,28 @@ body {
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); 
     transform: scale(0.99);
 }
+
+
+.task-card-container {
+    /* Kunci 3: Mengambil SEMUA ruang vertikal yang tersisa */
+    flex-grow: 1; 
+    
+    /* Kunci 4: Mengaktifkan Scroll Vertikal */
+    overflow-y: auto; 
+    
+    /* Kunci 5: Memastikan Flexbox berfungsi di dalam container scrolling */
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Jarak antar kartu tugas */
+    
+    /* Wajib: Mengatasi konflik Flexbox/Scrolling */
+    min-height: 0; 
+
+    max-height: 100%;
+    /* Opsional: Memberi sedikit padding internal agar scrollbar tidak menempel ke kartu */
+    padding: 0 5px 5px 0; 
+}
+
 
 
 
@@ -281,12 +313,25 @@ body {
     color: #888;
 }
 
-.task-priority {
+.task-priority-select {
+    /* Gaya Dasar Badge */
     font-size: 0.75rem;
     font-weight: 700;
     padding: 3px 8px;
     border-radius: 4px;
     text-transform: uppercase;
+    text-align: center;
+    
+    /* Hapus/Minimalisir Gaya Default Browser */
+    appearance: none; /* Kunci: Menghapus panah default pada browser */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    
+    /* Jaga lebar agar tidak terlalu besar */
+    max-width: 150px; 
 }
 
 /* Contoh Warna Prioritas (Sesuai Gambar) */
@@ -295,7 +340,26 @@ body {
     color: #d9534f; /* Teks merah */
 }
 
-.urgent {
+.medium-priority {
     background-color: #fff3cd; /* Background kuning muda */
     color: #f0ad4e; /* Teks kuning/oranye */
+}
+
+.low-priority {
+    background-color: #d9edf7; /* Background biru muda */
+    color: #5bc0de; /* Teks biru */
+}
+
+
+
+.footer {
+    text-align: center;
+    color: #888;
+    font-size: 0.9rem;
+    padding: 10px 0;
+    border-top: 1px solid #e0e0e0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    background-color: #f8f8f8;
+    border-radius: 0 0 8px 8px;
+    flex-shrink: 0;
 }

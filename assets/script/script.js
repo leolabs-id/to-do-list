@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const userJabatanDisplay = document.getElementById('userJabatanDisplay');
 
 
+    // Proses Login
     if (loginForm) {
         loginForm.addEventListener('submit', (event) => {
             event.preventDefault();
@@ -31,6 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error('Form login tidak ditemukan.');
     }
 
+    // Tampilkan tanggal
     const tampilTanggal = document.getElementById('tampilTanggal');
     const today = new Date();
     const isoDate = today.toISOString().split('T')[0];
@@ -42,6 +44,25 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     const IndoDateString = today.toLocaleDateString('id-ID', formatIndDate);
     tampilTanggal.textContent = `${IndoDateString}`;
+
+
+    const prioritySelectors = document.querySelectorAll('.task-priority-select');
+    const allPriorityClasses = ['high-priority', 'medium-priority', 'low-priority'];
+
+    prioritySelectors.forEach((selector) => {
+        // Hapus semua kelas prioritas sebelumnya
+        selector.classList.add(selector.value);
+
+        selector.addEventListener('change', () => {
+            const selectedPriority = selector.value;
+            selector.classList.remove(...allPriorityClasses);
+            selector.classList.add(selectedPriority);
+            console.log(`Prioritas terpilih: ${selectedPriority}`);
+        });
+            
+
+    });
+
 
 
 });
