@@ -6,11 +6,17 @@
 
 
 /* body */
-body {
+html, body {
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
     margin: 0 auto;
     padding: 0;
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
 }
 
 
@@ -63,10 +69,6 @@ body {
     /* Kunci yang akan digunakan JavaScript untuk menyembunyikan elemen */
     display: none !important; 
 }
-
-
-
-
 
 
 
@@ -141,16 +143,24 @@ body {
     color: #7e7e7e;
 }
 
+
+/* Main Content */
 .main-content {
     background-color: #fafafa;
     padding: 40px 0;
+    flex-grow: 1;
+    flex-direction: column;
+    display: flex;
+    
 }
 
 .task-board {
     max-width: 1200px;
+    width: 100%;
     margin: 0 auto;
     padding: 0 20px;
     display: flex;
+    flex-grow: 1;
     gap: 20px;
 }
 
@@ -163,6 +173,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    height: 100%;
 }
 
 .add-task {

@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const welcomeNamaDisplay = document.getElementById('welcomeNamaDisplay');
     const userJabatanDisplay = document.getElementById('userJabatanDisplay');
 
+
     if (loginForm) {
         loginForm.addEventListener('submit', (event) => {
             event.preventDefault();
@@ -20,6 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
             welcomeNamaDisplay.textContent = `Welcome back, ${nama}`;
             userJabatanDisplay.textContent = jabatan;
 
+
             if (loginModal) {
                 loginModal.classList.add('hidden');
             }
@@ -28,4 +30,19 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
         console.error('Form login tidak ditemukan.');
     }
+
+    const tampilTanggal = document.getElementById('tampilTanggal');
+    const today = new Date();
+    const isoDate = today.toISOString().split('T')[0];
+    const formatIndDate = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    }
+    const IndoDateString = today.toLocaleDateString('id-ID', formatIndDate);
+    tampilTanggal.textContent = `${IndoDateString}`;
+
+
 });
+
