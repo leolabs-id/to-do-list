@@ -193,29 +193,55 @@ const getTasksByStatus = (status) => {
 // console.log(toDoData);
 
 
+// ======================================
+// FUNGSI UTILITY (Pindahkan ke luar DOMContentLoaded)
+// ======================================
+
+const formatDateDisplay = (isoDate) => {
+    if (!isoDate) return '';
+    const dateObj = new Date(isoDate);
+
+    // Format ID/Short Month (Misalnya: 17 Feb 2025)
+    return dateObj.toLocaleDateString('id-ID', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric'
+    });
+};
+
+const autoResizeTextarea = (textarea) => {
+    // Fungsi auto resize (sebelumnya sudah kita buat)
+    textarea.style.height = 'auto'; 
+    textarea.style.height = (textarea.scrollHeight) + 'px'; 
+};
+
+// INISIALISASI KARTU TUGAS YANG ADA
+const initializeExistingTaskCards = (allPriorityClasses) => {
+    document.querySelectorAll('.task-priority-select').forEach(selector => {
+        // Ini memastikan elemen awal yang ada memiliki warna default yang benar
+        selector.classList.add(selector.value);
+    });
+};
 
 
 
-
-
-
-
-
-
-
-
-
+// ======================================
+// EVENT LISTENERS DAN INISIALISASI
+// ======================================
 document.addEventListener("DOMContentLoaded", () => {
-    const loginModal = document.getElementById('loginModal');
 
-    const loginForm =  document.getElementById('login-form');
+
+    // --- VARIABEL TETAP ---
+    const loginModal = document.getElementById('loginModal');
+    const loginForm = document.getElementById('login-form');
     const namaInput = document.getElementById('nama');
     const jabatanInput = document.getElementById('jabatan');
-
     const welcomeNamaDisplay = document.getElementById('welcomeNamaDisplay');
     const userJabatanDisplay = document.getElementById('userJabatanDisplay');
+    const allPriorityClasses = ['high-priority', 'medium-priority', 'low-priority']; // Ini tetap dipertahankan
 
-    // PROSES MASUK LOGIN
+
+    // 1. PROSES MASUK LOGIN
     if (loginForm) {
         loginForm.addEventListener('submit', (event) => {
             event.preventDefault();
@@ -237,9 +263,9 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error('Form login tidak ditemukan.');
     }
 
+// ======================================
 
-
-    // TAMPILAN TANGGAL SAAT INI PADA HEADER
+    // 2. TAMPILAN TANGGAL SAAT INI PADA HEADER
     const tampilTanggal = document.getElementById('tampilTanggal');
     const today = new Date();
     const isoDate = today.toISOString().split('T')[0];
@@ -253,61 +279,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const IndoDateString = today.toLocaleDateString('id-ID', formatIndDate);
     tampilTanggal.textContent = `${IndoDateString}`;
 
-    const prioritySelectors = document.querySelectorAll('.task-priority-select');
-    const allPriorityClasses = ['high-priority', 'medium-priority', 'low-priority'];
+// =====================================
 
-    prioritySelectors.forEach((selector) => {
-        // Hapus semua kelas prioritas sebelumnya
-        selector.classList.add(selector.value);
+    // 3. INISIALISASI WARNA PRIORITAS AWAL
+    initializeExistingTaskCards(allPriorityClasses); 
 
-        selector.addEventListener('change', () => {
-            const selectedPriority = selector.value;
-            selector.classList.remove(...allPriorityClasses);
-            selector.classList.add(selectedPriority);
-            console.log(`Prioritas terpilih: ${selectedPriority}`);
-        });
+// =====================================
 
-    });
-
-
-
-    // PERUBAHAN PILIHAN TANGGAL PADA FOOTER TASK CARD
-    const dateDisplayElement = document.getElementById('taskDateDisplay');
-    const dateInputElement = document.getElementById('taskDateInput');
-
-    const formatDateDisplay = (isoDate) => {
-        if (!isoDate) return '';
-        const dateObj = new Date(isoDate);
-
-        return dateObj.toLocaleDateString('id-ID', {
-            day: 'numeric',
-            month: 'short',
-            year: 'numeric'
-        });
-    };
-        
-    if (dateInputElement && dateDisplayElement) {
-        const InitialIsoDate = dateInputElement.value;
-        const InitialDisplayDate = formatDateDisplay(InitialIsoDate);
-
-        dateDisplayElement.textContent = InitialDisplayDate;
-
-        dateDisplayElement.addEventListener('click', () => {
-            dateInputElement.showPicker();
-        });
-
-        dateInputElement.addEventListener('change', () => {
-            const newIsoDate = event.target.value;
-            const newDisplayDate = formatDateDisplay(newIsoDate);
-            dateDisplayElement.textContent = newDisplayDate;
-
-            console.log('Data Tanggal Baru:', newIsoDate);
-        });
-
-    };
-
-
-    // MODAL TAMBAH TUGAS BARU
+     // 4. MODAL TAMBAH TUGAS BARU
     const addTaskButton = document.getElementById('addTaskBtn');
     const newTaskModal = document.getElementById('newTaskModal');
     const cancelNewTaskBtn = document.getElementById('cancelNewTaskBtn');
@@ -330,9 +309,60 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+// ======================================
 
+    // ------------------------------------------------------------------
+    // 5. DELEGASI EVENT GLOBAL (Semua interaksi Task Card)
+    // ------------------------------------------------------------------
 
-    // AUTO RESIZE TEXTAREA UNTUK DESKRIPSI TUGAS
+    // Listener TUNGGAL untuk semua interaksi 'change' (Prioritas & Tanggal Input)
+    document.body.addEventListener('change', (event) => {
+        const target = event.target;
+
+        // A. Perubahan Prioritas (Delegasi)
+        if (target.classList.contains('task-priority-select')) {
+            const selectedPriority = target.value;
+            target.classList.remove(...allPriorityClasses);
+            target.classList.add(selectedPriority);
+            console.log(`Prioritas terpilih (Delegasi): ${selectedPriority}`);
+            // TODO: Panggil fungsi updateTaskPropertyById() di sini
+        }
+
+        // B. Perubahan Tanggal Input (Delegasi)
+        if (target.classList.contains('task-date-input')) {
+            const newIsoDate = target.value;
+            const displaySpan = target.previousElementSibling; // Span tampilan
+            
+            if (displaySpan) {
+                const newDisplayDate = formatDateDisplay(newIsoDate);
+                displaySpan.textContent = newDisplayDate;
+            }
+            console.log('Data Tanggal Baru (Delegasi):', newIsoDate);
+            // TODO: Panggil fungsi updateTaskPropertyById() di sini
+        }
+    });
+
+    // ================================================================
+
+    // Listener TUNGGAL untuk semua interaksi click (Date Picker Trigger & Modal)
+    document.body.addEventListener('click', (event) => {
+        
+        // A. Date Picker Trigger (Delegasi)
+        if (event.target.classList.contains('task-date')) {
+            const displaySpan = event.target;
+            const dateInput = displaySpan.nextElementSibling; 
+
+            if (dateInput && dateInput.classList.contains('visually-hidden')) {
+                dateInput.showPicker();
+            }
+        }
+        
+        
+    });
+
+    // ================================================================
+
+    // Listener TUNGGAL untuk semua interaksi input (Auto Resize Textarea)
     document.body.addEventListener('input', (event) => {
         const targetElement = event.target;
         
@@ -342,8 +372,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Delegasi Event untuk Toggle Scroll pada focus/blur
+
+    // Listener TUNGGAL untuk semua interaksi focusin focusout (Edit Deskripsi)
     document.body.addEventListener('focusin', (event) => {
+
+        
         if (event.target.classList.contains('task-desc')) {
             console.log('Deskripsi sedang diedit.');
         }
@@ -354,7 +387,6 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log('Deskripsi selesai diedit.');
         }
     }, true);
-
 
 
 });
