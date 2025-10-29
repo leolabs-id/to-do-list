@@ -107,51 +107,10 @@
                 <!-- Kolom 1: To Do -->
                 <div class="task-list">
                     <h2>To Do</h2>
-                    <div class="task-card-container">
+                    <div class="task-card-container" id="todo-tasks-container">
                     <!-- Isi kartu tugas To Do List-->
-
-                        <form class="task-card" id="task-card-1">
-                            <div class="card-header">
-                                <input 
-                                    type="text" 
-                                    class="task-title" 
-                                    id="task-title-1" 
-                                    value="Launch product promotion" 
-                                    placeholder="Masukkan Judul Tugas"
-                                    maxlength="50"  spellcheck="false"
-                                    required
-                                />
-                                
-                                <div class="header-actions">
-                                    <button class="options-btn">⋮</button>
-                                    <input type="checkbox" class="task-checkbox">
-                                </div>
-                            </div>
-                            
-                            <textarea 
-                                class="task-desc" 
-                                id="task-desc-1" 
-                                placeholder="Tambahkan deskripsi..." 
-                                rows="3" 
-                                spellcheck="false"
-                                required
-                            >Desc</textarea>
-
-                            <div class="card-footer">
-                                <div class="task-date-picker-container">
-                                    <span class="task-date" id="taskDateDisplay">17 Feb 2025</span>
-                                    <input type="date" class="task-date-input visually-hidden" id="taskDateInput" value="2025-02-17"/>
-                                </div>
-                                <select class="task-priority-select" data-priority-status="high-priority">
-                                    <option value="high-priority" selected>High-Priority</option>
-                                    <option value="medium-priority">Medium-Priority</option>
-                                    <option value="low-priority">Low-Priority</option>
-                                </select>
-                            </div>
-                        </form>
-
-
-                <!-- Akhir kartu tugas To Do List-->  
+                        
+                    <!-- Akhir kartu tugas To Do List-->  
                     </div>  
                 </div>  
             </section>
@@ -161,7 +120,7 @@
             <!-- Kolom 2: In Progress -->
             <section class="task-column in-progress">
                 <h2>In Progress</h2>
-                <div class="task-card-container">
+                <div class="task-card-container" id="inprogress-tasks-container">
                 <!-- Isi kartu tugas In Progress -->
                 
 
@@ -174,7 +133,7 @@
             <!-- Kolom 3: Done -->
             <section class="task-column done">
                 <h2>Done</h2>
-                <div class="task-card-container">
+                <div class="task-card-container" id="done-tasks-container">
                 <!-- Isi kartu tugas Done -->
 
                 

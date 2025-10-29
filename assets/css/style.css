@@ -381,6 +381,79 @@ body {
     padding: 0;
 }
 
+/* CONTAINER MENU (Kunci Posisi) */
+.task-options-menu-container {
+    position: relative; /* Kunci 1: Memposisikan menu absolut di dalamnya */
+    z-index: 10; /* Pastikan menu berada di atas elemen lain dalam kartu */
+}
+
+/* GAYA DROPDOWN MENU ITU SENDIRI */
+.task-options-menu {
+    /* Kunci 2: Membuat menu mengambang */
+    position: absolute; 
+    top: 100%; /* Tempatkan menu tepat di bawah tombol ⋮ */
+    right: 0; /* Tempatkan menu menempel di sisi kanan (tepat di bawah ⋮) */
+    
+    /* Styling Visual */
+    background-color: #ffffff; 
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    min-width: 180px; 
+    padding: 5px 0;
+}
+
+/* Styling Item di Dalam Menu */
+.task-options-menu .menu-item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 8px 12px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: #333;
+    transition: background-color 0.1s ease;
+}
+
+.task-options-menu .menu-item:hover {
+    background-color: #f0f0f0; /* Efek highlight saat di-hover */
+}
+
+/* Opsi Hapus (Visual Penekanan) */
+.task-options-menu .action-delete {
+    color: #dc3545; /* Warna merah untuk aksi hapus */
+    font-weight: 500; 
+}
+
+.task-options-menu .action-delete:hover {
+    color: #dc3545; /* Warna merah untuk aksi hapus */
+    background-color: #fceeef;
+    font-weight: 700; 
+}
+
+/* Styling Khusus untuk Opsi Pindah (action-move) */
+.task-options-menu .action-move {
+    /* Gaya Teks: Pastikan teksnya terlihat normal/tegas */
+    color: #007bff; /* Warna biru untuk aksi pindah (mirip link/primary action) */
+    font-weight: 500; /* Sedikit lebih tebal */
+}
+
+/* Efek Hover: Membuat Teks Tebal (fontWeight: bold) */
+.task-options-menu .action-move:hover {
+    font-weight: 700; /* Membuat teks lebih tebal saat hover */
+    background-color: #e6f7ff; /* Latar belakang biru sangat muda */
+    color: #0056b3; /* Biru lebih gelap */
+}
+
+/* Efek Active: Membuat Teks Sedikit Pudar (Saat Diklik) */
+.task-options-menu .menu-item:active {
+    /* Menerapkan efek pudar/tertekan pada SEMUA menu item */
+    opacity: 0.7; /* Membuat teks dan background terlihat pudar */
+    transform: scale(0.99); /* Efek visual tertekan yang halus */
+    transition: opacity 0.05s ease, transform 0.05s ease; /* Transisi yang sangat cepat */
+}
 
 /* FOOTER TANGGAL DI KARTU TUGAS */
 /* CLASS BARU: Menyembunyikan input secara visual, tetapi tetap berfungsi */

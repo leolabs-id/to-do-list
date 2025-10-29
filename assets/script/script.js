@@ -197,6 +197,7 @@ const getTasksByStatus = (status) => {
 // FUNGSI UTILITY (Pindahkan ke luar DOMContentLoaded)
 // ======================================
 
+// Format tampilan tanggal dari ISO ke format lokal (ID)
 const formatDateDisplay = (isoDate) => {
     if (!isoDate) return '';
     const dateObj = new Date(isoDate);
@@ -209,11 +210,15 @@ const formatDateDisplay = (isoDate) => {
     });
 };
 
+
+// Auto Resize Textarea berdasarkan konten
 const autoResizeTextarea = (textarea) => {
     // Fungsi auto resize (sebelumnya sudah kita buat)
     textarea.style.height = 'auto'; 
     textarea.style.height = (textarea.scrollHeight) + 'px'; 
 };
+
+
 
 // INISIALISASI KARTU TUGAS YANG ADA
 const initializeExistingTaskCards = (allPriorityClasses) => {
@@ -222,6 +227,151 @@ const initializeExistingTaskCards = (allPriorityClasses) => {
         selector.classList.add(selector.value);
     });
 };
+
+
+// ======================================
+// FUNGSI UTILITY: MEMBUAT TEMPLATE HTML UNTUK KARTU TUGAS
+// ======================================
+const createTaskCardHTML = (task, currentStatus) => {
+    // 1. Persiapan Variabel Tampilan
+    const isChecked = task.isCompleted ? 'checked' : '';
+    const priorityClass = task.priority; 
+    
+    // Format tanggal untuk tampilan (Misal: 17 Feb 2025)
+    // Pastikan fungsi formatDateDisplay sudah didefinisikan di atas
+    const displayDate = formatDateDisplay(task.dueDate || ''); 
+    
+    // Tentukan apakah input harus dinonaktifkan (karena sudah di kolom Done)
+    const isDisabled = task.status === 'done' ? 'disabled' : '';
+
+    // 2. Logika Menu Opsi (Hanya tampilkan opsi yang relevan)
+    let menuOptionsHTML = '';
+
+    // Opsi Pindahkan/Move (Muncul jika status BUKAN 'done')
+    if (currentStatus !== 'done') {
+        if (currentStatus !== 'inprogress') {
+            // Jika di To Do, bisa pindah ke In Progress
+            menuOptionsHTML += `<button type="button" class="menu-item action-move" data-move-to="inprogress">Pindah ke In Progress</button>`;
+        }
+        if (currentStatus !== 'todo') {
+            // Jika di In Progress, bisa pindah ke To Do
+            menuOptionsHTML += `<button type="button" class="menu-item action-move" data-move-to="todo">Pindah ke To Do</button>`;
+        }
+        // Selalu bisa pindah ke Done
+        menuOptionsHTML += `<button type="button" class="menu-item action-move" data-move-to="done">Tandai Selesai & Pindah ke Done</button>`;
+    }
+    
+    // Opsi Hapus (Selalu ada)
+    menuOptionsHTML += `<button type="button" class="menu-item action-delete">Hapus Tugas</button>`;
+
+
+    // 3. Template Literal (String HTML)
+    return `
+        <form class="task-card" id="${task.id}">
+            <div class="card-header">
+                <input 
+                    type="text" 
+                    class="task-title" 
+                    id="title-${task.id}" 
+                    value="${task.title}" 
+                    maxlength="50" spellcheck="false" required ${isDisabled}
+                />
+                <div class="header-actions">
+                    <div class="task-options-menu-container">
+                        <button type="button" class="options-btn" data-toggle-menu="${task.id}-menu">⋮</button>
+                        
+                        <div id="${task.id}-menu" class="task-options-menu hidden" data-status="${task.status}">
+                            ${menuOptionsHTML}
+                        </div>
+                    </div>
+                    <input type="checkbox" class="task-checkbox" ${isChecked} ${isDisabled}>
+                </div>
+            </div>
+            
+            <textarea 
+                class="task-desc" 
+                id="desc-${task.id}" 
+                placeholder="Tambahkan deskripsi..." 
+                rows="3" 
+                spellcheck="false"
+                required ${isDisabled}
+            >${task.description}</textarea>
+
+            <div class="card-footer">
+                <div class="task-date-picker-container">
+                    <span class="task-date" id="date-display-${task.id}">${displayDate}</span>
+                    <input type="date" class="task-date-input visually-hidden" id="date-input-${task.id}" value="${task.dueDate}" ${isDisabled}/>
+                </div>
+                <select class="task-priority-select ${priorityClass}" data-task-id="${task.id}" ${isDisabled}>
+                    <option value="high-priority" ${task.priority === 'high-priority' ? 'selected' : ''}>High-Priority</option>
+                    <option value="medium-priority" ${task.priority === 'medium-priority' ? 'selected' : ''}>Medium-Priority</option>
+                    <option value="low-priority" ${task.priority === 'low-priority' ? 'selected' : ''}>Low-Priority</option>
+                </select>
+            </div>
+        </form>
+    `;
+};
+
+// =================================================================================
+
+
+
+
+/**
+ * Fungsi untuk menghapus DOM lama dan merender ulang seluruh task board
+ * berdasarkan data yang ada di taskBoardData.
+ */
+const renderTaskBoard = () => {
+    console.log("🔄 Merender ulang Task Board...");
+
+    // 1. Definisikan wadah kolom (IDs di HTML Anda)
+    // Asumsi: Anda memiliki wadah <div id="todo-tasks">, <div id="inprogress-tasks">, dst.
+    const todoContainer = document.getElementById('todo-tasks-container');
+    const inProgressContainer = document.getElementById('inprogress-tasks-container');
+    const doneContainer = document.getElementById('done-tasks-container');
+
+    // Buat peta wadah untuk iterasi yang mudah
+    const containersMap = {
+        todo: todoContainer,
+        inprogress: inProgressContainer,
+        done: doneContainer
+    };
+
+    // 2. Iterasi melalui setiap status di taskBoardData
+    for (const statusKey in taskBoardData) {
+        const tasksArray = taskBoardData[statusKey]; // Array of tasks
+        const container = containersMap[statusKey];  // Wadah HTML (DOM)
+
+        // Verifikasi keamanan
+        if (!container) {
+            console.error(`Wadah DOM untuk status '${statusKey}' tidak ditemukan. Mohon cek ID di HTML.`);
+            continue;
+        }
+
+        // A. Hapus Konten Lama (Pembersihan)
+        container.innerHTML = ''; 
+
+        // B. Buat HTML baru dan sisipkan (Rendering)
+        let tasksHTML = '';
+        
+        tasksArray.forEach(task => {
+            // Memanggil fungsi rendering task card untuk setiap tugas
+            tasksHTML += createTaskCardHTML(task, statusKey); 
+        });
+
+        // Sisipkan semua HTML baru ke DOM
+        container.innerHTML = tasksHTML;
+        
+        // C. Aktifkan kembali auto-resize untuk task cards yang baru
+        container.querySelectorAll('.task-desc').forEach(autoResizeTextarea);
+        
+        console.log(`Kolom ${statusKey} dirender dengan ${tasksArray.length} tugas.`);
+    }
+};
+
+
+
+
 
 
 
@@ -238,8 +388,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const jabatanInput = document.getElementById('jabatan');
     const welcomeNamaDisplay = document.getElementById('welcomeNamaDisplay');
     const userJabatanDisplay = document.getElementById('userJabatanDisplay');
-    const allPriorityClasses = ['high-priority', 'medium-priority', 'low-priority']; // Ini tetap dipertahankan
-
+    const allPriorityClasses = ['high-priority', 'medium-priority', 'low-priority'];
 
     // 1. PROSES MASUK LOGIN
     if (loginForm) {
@@ -287,10 +436,12 @@ document.addEventListener("DOMContentLoaded", () => {
 // =====================================
 
      // 4. MODAL TAMBAH TUGAS BARU
+    const newTaskForm = document.getElementById('newTaskForm');
     const addTaskButton = document.getElementById('addTaskBtn');
     const newTaskModal = document.getElementById('newTaskModal');
     const cancelNewTaskBtn = document.getElementById('cancelNewTaskBtn');
 
+    // Tombol Membuka Modal form tambah tugas baru
     if (addTaskButton) {
         addTaskButton.addEventListener('click', () => {
             // Hapus class 'hidden' untuk menampilkan modal
@@ -300,6 +451,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Tombol Tutup Modal form tambah tugas baru
     if (cancelNewTaskBtn) {
         cancelNewTaskBtn.addEventListener('click', () => {
             // Tambahkan class 'hidden' untuk menyembunyikan modal
@@ -308,6 +460,40 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById('newTaskForm').reset();
         });
     }
+
+
+    if (newTaskForm) {
+        newTaskForm.addEventListener('submit', (event) => {
+            event.preventDefault(); // Mencegah form refresh halaman
+            
+            // Dapatkan nilai input dari MODAL (menggunakan ID yang spesifik untuk modal)
+            const title = document.getElementById('newTaskTitleInput').value.trim();
+            const desc = document.getElementById('newTaskDescInput').value.trim();
+            
+            // Tanggal: Ambil nilai YYYY-MM-DD dari input tersembunyi
+            const dueDate = document.getElementById('newTaskDateInput').value;
+            
+            // Prioritas: Ambil nilai yang dipilih dari select
+            const priority = document.getElementById('newTaskPrioritySelect').value;
+
+            // PENTING: Periksa validitas form bawaan HTML
+            if (!newTaskForm.checkValidity()) {
+                // Biarkan browser menampilkan peringatan 'required'
+                return; 
+            }
+
+            // 1. Panggil fungsi inti untuk menyimpan data
+            addNewTask(title, desc, dueDate, priority);
+
+            // 2. Kosongkan dan Tutup Modal
+            newTaskForm.reset();
+            newTaskModal.classList.add('hidden');
+            
+            // TODO: Panggil fungsi rendering global di sini untuk menampilkan tugas baru di dashboard!
+            console.log("Task Saved. Ready for rendering the board.");
+        });
+    }
+
 
 // ======================================
 
@@ -356,6 +542,36 @@ document.addEventListener("DOMContentLoaded", () => {
                 dateInput.showPicker();
             }
         }
+
+
+        // B. Toggle Menu Opsi Tugas (⋮) (Delegasi)
+        const target = event.target;
+        
+        // Cek apakah yang diklik adalah tombol titik tiga (⋮) atau di dalamnya
+        const optionsBtn = target.closest('.options-btn');
+
+        if (optionsBtn) {
+            // 1. Mencegah aksi default (jika tombol berada dalam form)
+            event.preventDefault(); 
+            
+            // 2. Cari menu popover terdekat (berada di sibling atau di dalam container)
+            // Kita cari container terdekat, lalu cari menu di dalamnya.
+            const menuContainer = optionsBtn.closest('.task-options-menu-container');
+            const menu = menuContainer ? menuContainer.querySelector('.task-options-menu') : null;
+            
+            if (menu) {
+                // KUNCI: Toggle class 'hidden' untuk menampilkan/menyembunyikan
+                menu.classList.toggle('hidden');
+            }
+        }
+        
+        // --- LOGIKA PENUTUPAN MENU GLOBAL ---
+        // Jika klik terjadi di luar tombol (⋮) dan di luar menu itu sendiri, tutup semua menu.
+        if (!optionsBtn && !target.closest('.task-options-menu')) {
+            document.querySelectorAll('.task-options-menu').forEach(openMenu => {
+                openMenu.classList.add('hidden');
+            });
+        }
         
         
     });
@@ -372,6 +588,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    // ================================================================
 
     // Listener TUNGGAL untuk semua interaksi focusin focusout (Edit Deskripsi)
     document.body.addEventListener('focusin', (event) => {
