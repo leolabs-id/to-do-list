@@ -330,16 +330,22 @@ body {
     outline: none;
     
     /* Kunci Scrolling & Ukuran */
-    min-height: 40px; /* Tinggi minimum yang nyaman (sekitar 2 baris) */
-    max-height: 200px; /* Kunci: Batas Tinggi Maksimum (sekitar 5-6 baris) */
-    overflow-y: auto; /* Mengaktifkan scroll vertikal ketika mencapai max-height */
+    min-height: 40px; 
+    max-height: 5em; 
+    overflow-y: hidden;
+    transition: all 0.2s ease;
     
     /* Memastikan ia mengambil lebar penuh */
     width: 100%;
     box-sizing: border-box; 
     line-height: 1.4;
+    
 }
 
+.task-desc:focus {
+    max-height: 200px; 
+    overflow-y: auto;
+}
 
 .card-header,
 .card-footer {
