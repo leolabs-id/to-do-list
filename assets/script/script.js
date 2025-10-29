@@ -440,12 +440,23 @@ document.addEventListener("DOMContentLoaded", () => {
     const addTaskButton = document.getElementById('addTaskBtn');
     const newTaskModal = document.getElementById('newTaskModal');
     const cancelNewTaskBtn = document.getElementById('cancelNewTaskBtn');
+    const newTaskDateInput = document.getElementById('newTaskDateInput'); 
+    const newTaskDateDisplay = document.getElementById('newTaskDateDisplay');
 
     // Tombol Membuka Modal form tambah tugas baru
     if (addTaskButton) {
         addTaskButton.addEventListener('click', () => {
             // Hapus class 'hidden' untuk menampilkan modal
             newTaskModal.classList.remove('hidden'); 
+
+            if (newTaskDateInput && newTaskDateDisplay) {
+                // 1. Atur nilai input tersembunyi ke tanggal hari ini (ISO Format)
+                newTaskDateInput.value = isoDate; 
+                
+                // 2. Format dan atur span tampilan ke tanggal hari ini (Format Tampilan)
+                const defaultDisplayDate = formatDateDisplay(isoDate);
+                newTaskDateDisplay.textContent = defaultDisplayDate;
+            }
             
             document.getElementById('newTaskTitleInput').focus();
         });
@@ -464,23 +475,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (newTaskForm) {
         newTaskForm.addEventListener('submit', (event) => {
-            event.preventDefault(); // Mencegah form refresh halaman
             
-            // Dapatkan nilai input dari MODAL (menggunakan ID yang spesifik untuk modal)
-            const title = document.getElementById('newTaskTitleInput').value.trim();
-            const desc = document.getElementById('newTaskDescInput').value.trim();
-            
-            // Tanggal: Ambil nilai YYYY-MM-DD dari input tersembunyi
-            const dueDate = document.getElementById('newTaskDateInput').value;
-            
-            // Prioritas: Ambil nilai yang dipilih dari select
-            const priority = document.getElementById('newTaskPrioritySelect').value;
-
             // PENTING: Periksa validitas form bawaan HTML
             if (!newTaskForm.checkValidity()) {
-                // Biarkan browser menampilkan peringatan 'required'
-                return; 
+                return; // Biarkan browser menampilkan peringatan 'required'
             }
+            
+            // Hanya jika valid, baru cegah default dan proses
+            event.preventDefault(); 
+
+            // Dapatkan nilai input dari MODAL
+            const title = document.getElementById('newTaskTitleInput').value.trim();
+            const desc = document.getElementById('newTaskDescInput').value.trim();
+            const dueDate = document.getElementById('newTaskDateInput').value;
+            const priority = document.getElementById('newTaskPrioritySelect').value;
 
             // 1. Panggil fungsi inti untuk menyimpan data
             addNewTask(title, desc, dueDate, priority);
@@ -489,11 +497,12 @@ document.addEventListener("DOMContentLoaded", () => {
             newTaskForm.reset();
             newTaskModal.classList.add('hidden');
             
-            // TODO: Panggil fungsi rendering global di sini untuk menampilkan tugas baru di dashboard!
-            console.log("Task Saved. Ready for rendering the board.");
+            // 3. PANGGIL FUNGSI RENDERING GLOBAL
+            renderTaskBoard(); 
+            
+            console.log("Task Saved. Board rendered.");
         });
     }
-
 
 // ======================================
 
