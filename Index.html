@@ -23,6 +23,58 @@
         </div>
     </div>
 
+
+
+    <div id="newTaskModal" class="modal-backdrop hidden">
+        <div class="modal-content new-task-modal-content">
+            
+            <h3 class="modal-title">Tambahkan Tugas Baru</h3>
+            
+            <form id="newTaskForm" class="task-card task-create-form">
+                <div class="card-header">
+                    <input 
+                        type="text" 
+                        class="task-title" 
+                        id="newTaskTitleInput" 
+                        placeholder="Judul Tugas (maks 50 karakter)"
+                        maxlength="50" 
+                        spellcheck="false"
+                        required
+                    />
+                </div>
+                
+                <textarea 
+                    class="task-desc" 
+                    id="newTaskDescInput" 
+                    placeholder="Tambahkan deskripsi..." 
+                    rows="3" 
+                    spellcheck="false"
+                ></textarea>
+
+                <div class="card-footer">
+                    <div class="task-date-picker-container">
+                        <span class="task-date" id="newTaskDateDisplay">Pilih Tanggal</span>
+                        <input type="date" class="task-date-input visually-hidden" id="newTaskDateInput"/>
+                    </div>
+                    
+                    <select class="task-priority-select" id="newTaskPrioritySelect">
+                        <option value="medium-priority" selected>Medium-Priority</option>
+                        <option value="high-priority">High-Priority</option>
+                        <option value="low-priority">Low-Priority</option>
+                    </select>
+                </div>
+                
+                <div class="form-controls">
+                    <button type="submit" class="btn-primary" id="saveNewTaskBtn">SIMPAN TUGAS</button>
+                    <button type="button" class="btn-secondary" id="cancelNewTaskBtn">BATAL</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+
     <header class="header">
         <div class="header-container">
             <div class="user-info">
@@ -45,7 +97,7 @@
     <main class="main-content">
         <div class="task-board">
             <section class="task-column to-do">
-                <div class="add-task">
+                <div id="addTaskBtn" class="add-task">
                     <h2>Add new task +</h2>
                 </div>
                 <!-- Kolom 1: To Do -->
@@ -54,259 +106,71 @@
                     <div class="task-card-container">
                     <!-- Isi kartu tugas To Do List-->
 
-                    <div class="task-card">
-                        <div class="card-header">
-                            <h3 class="task-title">Launch product promotion</h3>
-                            
-                            <div class="header-actions">
-                                <button class="options-btn">⋮</button>
-                                <input type="checkbox" class="task-checkbox">
+                        <form class="task-card" id="task-card-1">
+                            <div class="card-header">
+                                <input 
+                                    type="text" 
+                                    class="task-title" 
+                                    id="task-title-1" 
+                                    value="Launch product promotion" 
+                                    placeholder="Masukkan Judul Tugas"
+                                    maxlength="50"  spellcheck="false"
+                                    required
+                                />
+                                
+                                <div class="header-actions">
+                                    <button class="options-btn">⋮</button>
+                                    <input type="checkbox" class="task-checkbox">
+                                </div>
                             </div>
-                        </div>
-
-                        <p class="task-desc">Desc</p>
-
-                        <div class="card-footer">
-                            <span class="task-date">17 Feb 2025</span>
-                            <select class="task-priority-select" data-priority-status="high-priority">
-                                <option value="high-priority" selected>High-Priority</option>
-                                <option value="medium-priority">Medium-Priority</option>
-                                <option value="low-priority">Low-Priority</option>
-                            </select>
-                        </div>
-                    </div>
-
-
-                    <div class="task-card">
-                        <div class="card-header">
-                            <h3 class="task-title">Launch product promotion</h3>
                             
-                            <div class="header-actions">
-                                <button class="options-btn">⋮</button>
-                                <input type="checkbox" class="task-checkbox">
+                            <textarea 
+                                class="task-desc" 
+                                id="task-desc-1" 
+                                placeholder="Tambahkan deskripsi..." 
+                                rows="3" 
+                                spellcheck="false"
+                                required
+                            >Desc</textarea>
+
+                            <div class="card-footer">
+                                <div class="task-date-picker-container">
+                                    <span class="task-date" id="taskDateDisplay">17 Feb 2025</span>
+                                    <input type="date" class="task-date-input visually-hidden" id="taskDateInput" value="2025-02-17"/>
+                                </div>
+                                <select class="task-priority-select" data-priority-status="high-priority">
+                                    <option value="high-priority" selected>High-Priority</option>
+                                    <option value="medium-priority">Medium-Priority</option>
+                                    <option value="low-priority">Low-Priority</option>
+                                </select>
                             </div>
-                        </div>
-
-                        <p class="task-desc">Desc</p>
-
-                        <div class="card-footer">
-                            <span class="task-date">17 Feb 2025</span>
-                            <select class="task-priority-select" data-priority-status="high-priority">
-                                <option value="high-priority" selected>High-Priority</option>
-                                <option value="medium-priority">Medium-Priority</option>
-                                <option value="low-priority">Low-Priority</option>
-                            </select>
-                        </div>
-                    </div>
+                        </form>
 
 
-                    <div class="task-card">
-                        <div class="card-header">
-                            <h3 class="task-title">Launch product promotion</h3>
-                            
-                            <div class="header-actions">
-                                <button class="options-btn">⋮</button>
-                                <input type="checkbox" class="task-checkbox">
-                            </div>
-                        </div>
-
-                        <p class="task-desc">Desc</p>
-
-                        <div class="card-footer">
-                            <span class="task-date">17 Feb 2025</span>
-                            <select class="task-priority-select" data-priority-status="high-priority">
-                                <option value="high-priority" selected>High-Priority</option>
-                                <option value="medium-priority">Medium-Priority</option>
-                                <option value="low-priority">Low-Priority</option>
-                            </select>
-                        </div>
-                    </div>
-
-
-                    <div class="task-card">
-                        <div class="card-header">
-                            <h3 class="task-title">Launch product promotion</h3>
-                            
-                            <div class="header-actions">
-                                <button class="options-btn">⋮</button>
-                                <input type="checkbox" class="task-checkbox">
-                            </div>
-                        </div>
-
-                        <p class="task-desc">Desc</p>
-
-                        <div class="card-footer">
-                            <span class="task-date">17 Feb 2025</span>
-                            <select class="task-priority-select" data-priority-status="high-priority">
-                                <option value="high-priority" selected>High-Priority</option>
-                                <option value="medium-priority">Medium-Priority</option>
-                                <option value="low-priority">Low-Priority</option>
-                            </select>
-                        </div>
-                    </div>
-
-
-                    <div class="task-card">
-                        <div class="card-header">
-                            <h3 class="task-title">Launch product promotion</h3>
-                            
-                            <div class="header-actions">
-                                <button class="options-btn">⋮</button>
-                                <input type="checkbox" class="task-checkbox">
-                            </div>
-                        </div>
-
-                        <p class="task-desc">Desc</p>
-
-                        <div class="card-footer">
-                            <span class="task-date">17 Feb 2025</span>
-                            <select class="task-priority-select" data-priority-status="high-priority">
-                                <option value="high-priority" selected>High-Priority</option>
-                                <option value="medium-priority">Medium-Priority</option>
-                                <option value="low-priority">Low-Priority</option>
-                            </select>
-                        </div>
-                    </div>
-
-
-                    <div class="task-card">
-                        <div class="card-header">
-                            <h3 class="task-title">Launch product promotion</h3>
-                            
-                            <div class="header-actions">
-                                <button class="options-btn">⋮</button>
-                                <input type="checkbox" class="task-checkbox">
-                            </div>
-                        </div>
-
-                        <p class="task-desc">Desc</p>
-
-                        <div class="card-footer">
-                            <span class="task-date">17 Feb 2025</span>
-                            <select class="task-priority-select" data-priority-status="high-priority">
-                                <option value="high-priority" selected>High-Priority</option>
-                                <option value="medium-priority">Medium-Priority</option>
-                                <option value="low-priority">Low-Priority</option>
-                            </select>
-                        </div>
-                    </div>
-
-
-                    <div class="task-card">
-                        <div class="card-header">
-                            <h3 class="task-title">Launch product promotion</h3>
-                            
-                            <div class="header-actions">
-                                <button class="options-btn">⋮</button>
-                                <input type="checkbox" class="task-checkbox">
-                            </div>
-                        </div>
-
-                        <p class="task-desc">Desc</p>
-
-                        <div class="card-footer">
-                            <span class="task-date">17 Feb 2025</span>
-                            <select class="task-priority-select" data-priority-status="high-priority">
-                                <option value="high-priority" selected>High-Priority</option>
-                                <option value="medium-priority">Medium-Priority</option>
-                                <option value="low-priority">Low-Priority</option>
-                            </select>
-                        </div>
-                    </div>
-
-
-                    <div class="task-card">
-                        <div class="card-header">
-                            <h3 class="task-title">Launch product promotion</h3>
-                            
-                            <div class="header-actions">
-                                <button class="options-btn">⋮</button>
-                                <input type="checkbox" class="task-checkbox">
-                            </div>
-                        </div>
-
-                        <p class="task-desc">Desc</p>
-
-                        <div class="card-footer">
-                            <span class="task-date">17 Feb 2025</span>
-                            <select class="task-priority-select" data-priority-status="high-priority">
-                                <option value="high-priority" selected>High-Priority</option>
-                                <option value="medium-priority">Medium-Priority</option>
-                                <option value="low-priority">Low-Priority</option>
-                            </select>
-                        </div>
-                    </div>
-
-
-                    <div class="task-card">
-                        <div class="card-header">
-                            <h3 class="task-title">Launch product promotion</h3>
-                            
-                            <div class="header-actions">
-                                <button class="options-btn">⋮</button>
-                                <input type="checkbox" class="task-checkbox">
-                            </div>
-                        </div>
-
-                        <p class="task-desc">Desc</p>
-
-                        <div class="card-footer">
-                            <span class="task-date">17 Feb 2025</span>
-                            <select class="task-priority-select" data-priority-status="high-priority">
-                                <option value="high-priority" selected>High-Priority</option>
-                                <option value="medium-priority">Medium-Priority</option>
-                                <option value="low-priority">Low-Priority</option>
-                            </select>
-                        </div>
-                    </div>
-
-
-                    <div class="task-card">
-                        <div class="card-header">
-                            <h3 class="task-title">Launch product promotion</h3>
-                            
-                            <div class="header-actions">
-                                <button class="options-btn">⋮</button>
-                                <input type="checkbox" class="task-checkbox">
-                            </div>
-                        </div>
-
-                        <p class="task-desc">Desc</p>
-
-                        <div class="card-footer">
-                            <span class="task-date">17 Feb 2025</span>
-                            <select class="task-priority-select" data-priority-status="high-priority">
-                                <option value="high-priority" selected>High-Priority</option>
-                                <option value="medium-priority">Medium-Priority</option>
-                                <option value="low-priority">Low-Priority</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- percobaan -->
-                    </div> 
-
-
-
-
-
-                <!-- Akhir kartu tugas To Do List-->    
+                <!-- Akhir kartu tugas To Do List-->  
+                    </div>  
                 </div>  
             </section>
             <!-- Kolom 2: In Progress -->
             <section class="task-column in-progress">
                 <h2>In Progress</h2>
+                <div class="task-card-container">
                 <!-- Isi kartu tugas In Progress -->
+                
 
                 <!-- Akhir kartu tugas In Progress -->
+                 </div>
             </section>
 
             <!-- Kolom 3: Done -->
             <section class="task-column done">
                 <h2>Done</h2>
+                <div class="task-card-container">
                 <!-- Isi kartu tugas Done -->
 
+                
                 <!-- Akhir kartu tugas Done -->
+                </div>
             </section>
         </div>
     </main>
