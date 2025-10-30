@@ -58,8 +58,8 @@
                     </div>
                     
                     <select class="task-priority-select" id="newTaskPrioritySelect">
-                        <option value="medium-priority" selected>Medium-Priority</option>
-                        <option value="high-priority">High-Priority</option>
+                        <option value="high-priority" selected>High-Priority</option>
+                        <option value="medium-priority" >Medium-Priority</option>
                         <option value="low-priority">Low-Priority</option>
                     </select>
                 </div>
@@ -100,14 +100,14 @@
         <div class="task-board">
 
             <!-- sECTION 1 : TO DO -->
-            <section class="task-column to-do">
+            <section class="task-column to-do" >
                 <div id="addTaskBtn" class="add-task">
                     <h2>Add new task +</h2>
                 </div>
                 <!-- Kolom 1: To Do -->
                 <div class="task-list">
                     <h2>To Do</h2>
-                    <div class="task-card-container" id="todo-tasks-container">
+                    <div class="task-card-container" id="todo-tasks-container" data-status="todo">
                     <!-- Isi kartu tugas To Do List-->
                         
                     <!-- Akhir kartu tugas To Do List-->  
@@ -120,7 +120,7 @@
             <!-- Kolom 2: In Progress -->
             <section class="task-column in-progress">
                 <h2>In Progress</h2>
-                <div class="task-card-container" id="inprogress-tasks-container">
+                <div class="task-card-container" id="inprogress-tasks-container" data-status="inprogress">
                 <!-- Isi kartu tugas In Progress -->
                 
 
@@ -133,7 +133,7 @@
             <!-- Kolom 3: Done -->
             <section class="task-column done">
                 <h2>Done</h2>
-                <div class="task-card-container" id="done-tasks-container">
+                <div class="task-card-container" id="done-tasks-container" data-status="done">
                 <!-- Isi kartu tugas Done -->
 
                 

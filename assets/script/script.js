@@ -12,6 +12,24 @@ const taskBoardData = {
 }
 
 
+
+/**
+ * Menyimpan seluruh task board data ke LocalStorage.
+ * Dipanggil SETELAH setiap operasi CRUD (Create, Update, Delete).
+ */
+const saveTaskBoard = () => {
+    try {
+        // Kunci: JSON.stringify() mengubah objek JavaScript menjadi string JSON
+        const dataString = JSON.stringify(taskBoardData);
+        localStorage.setItem('kanbanData', dataString);
+        
+        console.log("💾 Data Task Board berhasil disimpan ke LocalStorage.");
+    } catch (error) {
+        console.error("Gagal menyimpan data ke LocalStorage:", error);
+    }
+};
+
+
 let globalTaskIdCounter = 0;
 // MENGHASILKAN TASK-ID UNIK
 const generateUniqueId = () => {
@@ -39,6 +57,8 @@ const addNewTask = (title, desc, dueDate, priority) => {
     // Konfirmasi di console log
     console.log(`✅ Tugas baru ditambahkan: ${title} (ID: ${taskId})`);
     console.log(`Array To Do memiliki ${toDoData.length} tugas.`);
+    // Panggil fungsi saveTaskBoard setelah menambah tugas
+    saveTaskBoard();
 };
 
 // Menghapus semua tugas dari semua kolom
@@ -50,6 +70,8 @@ const clearAllTasks = () => {
     
     console.log("🔥 Semua data tugas berhasil dihapus dari semua kolom.");
     console.log(`To Do: ${toDoData.length}, In Progress: ${inProgressData.length}, Done: ${doneData.length}`);
+    // Panggil fungsi saveTaskBoard setelah menghapus tugas
+    saveTaskBoard();
 };
 
 
@@ -81,6 +103,9 @@ const deleteTaskById = (taskId) => {
     if (!taskFoundAndDeleted) {
         console.warn(`❌ Gagal menghapus: Tugas dengan ID ${taskId} tidak ditemukan di task board.`);
     }
+
+    // Panggil fungsi saveTaskBoard setelah menghapus tugas
+    saveTaskBoard();
 };
 
 
@@ -120,6 +145,9 @@ const changeTaskStatus = (taskId, newStatus) => {
     destinationArray.push(taskObject);
 
     console.log(`✅ Tugas ${taskId} dipindahkan dari ${sourceArrayKey} ke ${newStatus}.`);
+
+    // Panggil fungsi saveTaskBoard setelah mengubah status tugas
+    saveTaskBoard();
 };
 
 
@@ -149,6 +177,9 @@ const updateTaskPropertyById = (taskId, propertyName, newValue) => {
     if (!taskFound) {
         console.warn(`❌ Update Gagal: Tugas dengan ID ${taskId} tidak ditemukan.`);
     }
+
+    // Panggil fungsi saveTaskBoard setelah memperbarui tugas
+    saveTaskBoard();
 };
 
 
@@ -229,6 +260,7 @@ const initializeExistingTaskCards = (allPriorityClasses) => {
 };
 
 
+
 // ======================================
 // FUNGSI UTILITY: MEMBUAT TEMPLATE HTML UNTUK KARTU TUGAS
 // ======================================
@@ -251,18 +283,18 @@ const createTaskCardHTML = (task, currentStatus) => {
     if (currentStatus !== 'done') {
         if (currentStatus !== 'inprogress') {
             // Jika di To Do, bisa pindah ke In Progress
-            menuOptionsHTML += `<button type="button" class="menu-item action-move" data-move-to="inprogress">Pindah ke In Progress</button>`;
+            menuOptionsHTML += `<button type="button" class="menu-item action-move" data-task-id="${task.id}" data-move-to="inprogress">Pindah ke In Progress</button>`;
         }
         if (currentStatus !== 'todo') {
             // Jika di In Progress, bisa pindah ke To Do
-            menuOptionsHTML += `<button type="button" class="menu-item action-move" data-move-to="todo">Pindah ke To Do</button>`;
+            menuOptionsHTML += `<button type="button" class="menu-item action-move" data-task-id="${task.id}" data-move-to="todo">Pindah ke To Do</button>`;
         }
         // Selalu bisa pindah ke Done
-        menuOptionsHTML += `<button type="button" class="menu-item action-move" data-move-to="done">Tandai Selesai & Pindah ke Done</button>`;
+        menuOptionsHTML += `<button type="button" class="menu-item action-move" data-task-id="${task.id}" data-move-to="done">Tandai Selesai & Pindah ke Done</button>`;
     }
     
     // Opsi Hapus (Selalu ada)
-    menuOptionsHTML += `<button type="button" class="menu-item action-delete">Hapus Tugas</button>`;
+    menuOptionsHTML += `<button type="button" class="menu-item action-delete" data-task-id="${task.id}">Hapus Tugas</button>`;
 
 
     // 3. Template Literal (String HTML)
@@ -371,6 +403,60 @@ const renderTaskBoard = () => {
 
 
 
+/**
+ * Memuat data dari LocalStorage dan mengisi array data utama.
+ * Dipanggil sekali saat aplikasi dimulai (di dalam DOMContentLoaded).
+ */
+const loadTaskBoard = () => {
+    const dataString = localStorage.getItem('kanbanData');
+    
+    if (dataString) {
+        // Kunci: JSON.parse() mengubah string JSON kembali menjadi objek JavaScript
+        const loadedData = JSON.parse(dataString);
+        
+        // 1. Mengisi array kosong (Mutasi Array)
+        // Kita gunakan splice() agar referensi array (toDoData, dll.) tetap sama
+        
+        toDoData.splice(0, toDoData.length, ...loadedData.todo);
+        inProgressData.splice(0, inProgressData.length, ...loadedData.inprogress);
+        doneData.splice(0, doneData.length, ...loadedData.done);
+        
+        console.log(`✅ Data Task Board berhasil dimuat. Total tugas: ${toDoData.length + inProgressData.length + doneData.length}`);
+        
+        // 2. Mengatur kembali Global Counter
+        // Mencari ID tertinggi di semua tugas untuk mencegah duplikasi saat tugas baru dibuat
+        updateGlobalCounter();
+        
+    } else {
+        console.log("ℹ️ LocalStorage kosong. Memulai dengan Task Board baru.");
+    }
+};
+
+
+/**
+ * Memperbarui globalTaskIdCounter berdasarkan ID tertinggi yang ditemukan dalam data.
+ * Penting setelah data dimuat dari LocalStorage.
+ */
+const updateGlobalCounter = () => {
+    // Kumpulkan semua ID tugas dari semua kolom
+    const allTasks = [...toDoData, ...inProgressData, ...doneData];
+    
+    if (allTasks.length === 0) {
+        globalTaskIdCounter = 0;
+        return;
+    }
+
+    // Ekstrak angka dari ID (misalnya dari "TASK-015" ambil 15)
+    const maxIdNumber = allTasks.reduce((max, task) => {
+        const idNumber = parseInt(task.id.replace('TASK-', ''), 10);
+        return idNumber > max ? idNumber : max;
+    }, 0); // Nilai awal max adalah 0
+
+    globalTaskIdCounter = maxIdNumber;
+    console.log(`Counter ID global diatur ulang ke: ${globalTaskIdCounter}`);
+};
+
+
 
 
 
@@ -389,6 +475,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const welcomeNamaDisplay = document.getElementById('welcomeNamaDisplay');
     const userJabatanDisplay = document.getElementById('userJabatanDisplay');
     const allPriorityClasses = ['high-priority', 'medium-priority', 'low-priority'];
+
+
+    // PANGGIL LOAD DATA DARI LOCALSTORAGE
+    loadTaskBoard();
+    // PANGGIL RENDERING TASK BOARD AWAL
+    renderTaskBoard();
+    // Inisialisasi warna prioritas untuk kartu tugas yang ada
+    initializeExistingTaskCards(allPriorityClasses);
 
     // 1. PROSES MASUK LOGIN
     if (loginForm) {
@@ -465,14 +559,29 @@ document.addEventListener("DOMContentLoaded", () => {
     // Tombol Tutup Modal form tambah tugas baru
     if (cancelNewTaskBtn) {
         cancelNewTaskBtn.addEventListener('click', () => {
+
+            // Dapatkan elemen select priority
+            const prioritySelect = document.getElementById('newTaskPrioritySelect');
+
+            // LANGKAH PEMBERSIHAN BARU:
+            const allPriorityClasses = ['high-priority', 'medium-priority', 'low-priority'];
+            if (prioritySelect) {
+            // LANGKAH PEMBERSIHAN BARU:
+            
+            // 1. Hapus semua class warna yang tersisa
+            prioritySelect.classList.remove(...allPriorityClasses);
+            
+            // 2. Tambahkan kembali class DEFAULT yang benar
+            prioritySelect.classList.add('high-priority'); 
+            }
+
             // Tambahkan class 'hidden' untuk menyembunyikan modal
             newTaskModal.classList.add('hidden');
-            
             document.getElementById('newTaskForm').reset();
         });
     }
 
-
+    // Proses Submit Form Tambah Tugas Baru
     if (newTaskForm) {
         newTaskForm.addEventListener('submit', (event) => {
             
@@ -489,11 +598,19 @@ document.addEventListener("DOMContentLoaded", () => {
             const desc = document.getElementById('newTaskDescInput').value.trim();
             const dueDate = document.getElementById('newTaskDateInput').value;
             const priority = document.getElementById('newTaskPrioritySelect').value;
+            // Dapatkan elemen select priority
+            const prioritySelect = document.getElementById('newTaskPrioritySelect');
+
 
             // 1. Panggil fungsi inti untuk menyimpan data
             addNewTask(title, desc, dueDate, priority);
 
             // 2. Kosongkan dan Tutup Modal
+            const allPriorityClasses = ['high-priority', 'medium-priority', 'low-priority'];
+            if (prioritySelect) {
+                prioritySelect.classList.remove(...allPriorityClasses);
+                prioritySelect.classList.add('high-priority'); // Reset warna ke default (high)
+            }
             newTaskForm.reset();
             newTaskModal.classList.add('hidden');
             
@@ -510,78 +627,208 @@ document.addEventListener("DOMContentLoaded", () => {
     // 5. DELEGASI EVENT GLOBAL (Semua interaksi Task Card)
     // ------------------------------------------------------------------
 
-    // Listener TUNGGAL untuk semua interaksi 'change' (Prioritas & Tanggal Input)
+    // Listener TUNGGAL untuk semua interaksi 'change'
     document.body.addEventListener('change', (event) => {
         const target = event.target;
 
-        // A. Perubahan Prioritas (Delegasi)
-        if (target.classList.contains('task-priority-select')) {
-            const selectedPriority = target.value;
-            target.classList.remove(...allPriorityClasses);
-            target.classList.add(selectedPriority);
-            console.log(`Prioritas terpilih (Delegasi): ${selectedPriority}`);
-            // TODO: Panggil fungsi updateTaskPropertyById() di sini
+        // Abaikan jika elemen berada di dalam Modal Form Tugas Baru
+        if (target.closest('#newTaskForm')) {
+            return; 
         }
 
-        // B. Perubahan Tanggal Input (Delegasi)
-        if (target.classList.contains('task-date-input')) {
-            const newIsoDate = target.value;
-            const displaySpan = target.previousElementSibling; // Span tampilan
+        // A. Pemindahan Berurutan (Checkbox)
+        if (target.classList.contains('task-checkbox') && target.checked) {
             
+            const taskId = target.closest('.task-card').id; 
+            const taskCard = target.closest('.task-card');
+            const currentStatus = taskCard.closest('.task-column').dataset.status; 
+            
+            let newStatus;
+            
+            if (currentStatus === 'todo') {
+                newStatus = 'inprogress';
+            } else if (currentStatus === 'inprogress') {
+                newStatus = 'done';
+            } else {
+                return;
+            }
+
+            changeTaskStatus(taskId, newStatus); 
+            renderTaskBoard(); 
+            console.log(`➡️ Pindah Checkbox: ${taskId} ke ${newStatus}`);
+            return;
+        }
+
+        // B. Update Prioritas Select (Konsolidasi UI & Data)
+        if (target.classList.contains('task-priority-select')) {
+            const taskId = target.closest('.task-card').id;
+            const newValue = target.value;
+            
+            // 1. Logika UI (Ganti Warna)
+            target.classList.remove(...allPriorityClasses);
+            target.classList.add(newValue); // Misal newValue adalah 'high-priority'
+            
+            // 2. Logika Data (Panggil Update)
+            updateTaskPropertyById(taskId, 'priority', newValue);
+            console.log(`✏️ Prioritas Update: ${newValue} pada ID ${taskId}`);
+        }
+
+        // C. Update Tanggal Input (Konsolidasi UI & Data)
+        if (target.classList.contains('task-date-input')) {
+            const taskId = target.closest('.task-card').id;
+            const newIsoDate = target.value; 
+            const displaySpan = target.previousElementSibling;
+            
+            // 1. Logika UI (Ganti Teks Tampilan)
             if (displaySpan) {
-                const newDisplayDate = formatDateDisplay(newIsoDate);
+                const newDisplayDate = formatDateDisplay(newIsoDate); // Asumsi fungsi ini ada
                 displaySpan.textContent = newDisplayDate;
             }
-            console.log('Data Tanggal Baru (Delegasi):', newIsoDate);
-            // TODO: Panggil fungsi updateTaskPropertyById() di sini
+
+            // 2. Logika Data (Panggil Update)
+            updateTaskPropertyById(taskId, 'dueDate', newIsoDate);
+            console.log(`✏️ Tanggal Update: ${newIsoDate} pada ID ${taskId}`);
         }
+
     });
+
 
     // ================================================================
 
-    // Listener TUNGGAL untuk semua interaksi click (Date Picker Trigger & Modal)
-    document.body.addEventListener('click', (event) => {
+
+    document.body.addEventListener('blur', (event) => {
+        const targetElement = event.target;
         
+        // KUNCI: Abaikan jika elemen berada di dalam Modal Form Tugas Baru
+        if (targetElement.closest('#newTaskForm')) {
+            return; 
+        }
+
+        // Cek apakah elemen target adalah input Judul atau Deskripsi
+        if (targetElement.classList.contains('task-title') || targetElement.classList.contains('task-desc')) {
+            
+            // 1. Ambil Nilai dan ID
+            const taskId = targetElement.closest('.task-card').id; // Ambil ID dari form/card terluar
+            const newValue = targetElement.value.trim();
+            
+            // Tentukan properti yang akan diperbarui
+            const propertyName = targetElement.classList.contains('task-title') ? 'title' : 'description';
+
+            // Validasi: Judul tidak boleh kosong
+            if (propertyName === 'title' && newValue === "") {
+                alert("Judul tugas tidak boleh kosong. Perubahan dibatalkan.");
+                return; 
+            }
+
+            // 2. Panggil fungsi data inti
+            updateTaskPropertyById(taskId, propertyName, newValue);
+            
+            console.log(`✏️ Update sukses: ${propertyName} pada ID ${taskId}`);
+
+
+        }
+    }, true); // Gunakan capture phase untuk blur
+
+
+    //=================================================================
+
+    // Listener TUNGGAL untuk semua interaksi click
+    document.body.addEventListener('click', (event) => {
+        const target = event.target;
+        
+        // --- 1. Aksi Data (Hapus/Pindah) ---
+        const menuItem = target.closest('.menu-item');
+        
+        if (menuItem) {
+            event.preventDefault(); 
+   
+            // Dapatkan TASK ID (Sudah disematkan di tombol aksi)
+            const taskId = menuItem.dataset.taskId;
+
+            // Logika Hapus (Delete)
+            if (menuItem.classList.contains('action-delete')) {
+                
+                // Konfirmasi Pengguna
+                if (confirm(`Apakah Anda yakin ingin menghapus tugas ${taskId} secara permanen?`)) {
+                    deleteTaskById(taskId); 
+                    renderTaskBoard(); 
+                    console.log(`🗑️ Tugas ID ${taskId} dihapus dan Task Board dirender ulang.`);
+                }
+                
+                // Tutup menu popover setelah aksi (baik dihapus atau dibatalkan)
+                menuItem.closest('.task-options-menu').classList.add('hidden');
+                return; // Penting: Hentikan eksekusi setelah aksi menu item
+            }
+
+            // Logika Pindah (Move)
+            else if (menuItem.classList.contains('action-move')) {
+                // KOREKSI: Ambil data-move-to dengan pengecekan keamanan
+                const newStatus = menuItem.dataset.moveTo; 
+                
+                if (!newStatus) {
+                    console.error("Kesalahan: Atribut data-move-to tidak ditemukan pada tombol pindah.");
+                    return; 
+                }
+                
+                // 1. Panggil fungsi data inti
+                changeTaskStatus(taskId, newStatus); 
+                
+                // 2. Render ulang seluruh dashboard
+                renderTaskBoard(); 
+                
+                console.log(`➡️ Tugas ID ${taskId} berhasil dipindahkan ke: ${newStatus}`);
+
+                // Tutup menu popover setelah aksi
+                menuItem.closest('.task-options-menu').classList.add('hidden');
+                return; // Hentikan eksekusi
+            }
+
+        }
+
+
         // A. Date Picker Trigger (Delegasi)
         if (event.target.classList.contains('task-date')) {
-            const displaySpan = event.target;
-            const dateInput = displaySpan.nextElementSibling; 
-
+            const dateInput = target.nextElementSibling; 
             if (dateInput && dateInput.classList.contains('visually-hidden')) {
                 dateInput.showPicker();
             }
         }
 
+        // B. LOGIKA MENU POPUP OPSI TUGAS (TOGGLE & GLOBAL CLOSURE)
 
-        // B. Toggle Menu Opsi Tugas (⋮) (Delegasi)
-        const target = event.target;
-        
-        // Cek apakah yang diklik adalah tombol titik tiga (⋮) atau di dalamnya
         const optionsBtn = target.closest('.options-btn');
+        const clickedMenu = target.closest('.task-options-menu'); // Menu yang baru diklik
 
+        let menuToToggle = null;
         if (optionsBtn) {
-            // 1. Mencegah aksi default (jika tombol berada dalam form)
+            const menuContainer = optionsBtn.closest('.task-options-menu-container');
+            menuToToggle = menuContainer ? menuContainer.querySelector('.task-options-menu') : null;
+        }
+
+        // --- LOGIKA PENUTUPAN SEMUA MENU (Kecuali yang Baru Dibuka) ---
+        document.querySelectorAll('.task-options-menu').forEach(openMenu => {
+            // Tutup semua menu yang terbuka kecuali yang sedang ditoggle
+            if (openMenu !== menuToToggle) {
+                openMenu.classList.add('hidden');
+            }
+        });
+
+        // 3. LOGIKA PEMBUKAAN/TOGGLE
+        if (menuToToggle) {
             event.preventDefault(); 
             
-            // 2. Cari menu popover terdekat (berada di sibling atau di dalam container)
-            // Kita cari container terdekat, lalu cari menu di dalamnya.
-            const menuContainer = optionsBtn.closest('.task-options-menu-container');
-            const menu = menuContainer ? menuContainer.querySelector('.task-options-menu') : null;
-            
-            if (menu) {
-                // KUNCI: Toggle class 'hidden' untuk menampilkan/menyembunyikan
-                menu.classList.toggle('hidden');
-            }
+            // Sekarang kita aman untuk toggle menu yang ditargetkan.
+            // Jika menu lain sudah terbuka, mereka ditutup di langkah 2.
+            menuToToggle.classList.toggle('hidden');
         }
         
-        // --- LOGIKA PENUTUPAN MENU GLOBAL ---
-        // Jika klik terjadi di luar tombol (⋮) dan di luar menu itu sendiri, tutup semua menu.
-        if (!optionsBtn && !target.closest('.task-options-menu')) {
+        // 4. LOGIKA PENUTUPAN SAAT KLIK DI LUAR (GLOBAL CLOSURE)
+        // Jika klik tidak mengenai tombol manapun DAN tidak di dalam menu manapun, tutup sisa menu.
+        if (!optionsBtn && !clickedMenu) { 
             document.querySelectorAll('.task-options-menu').forEach(openMenu => {
                 openMenu.classList.add('hidden');
             });
         }
-        
         
     });
 
