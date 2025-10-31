@@ -684,37 +684,36 @@ body {
 
 
 @media (max-width: 768px) {
-    /* 1. HEADER (Membuat Header lebih ringkas) */
+    /* 1. HEADER */
     .header-container {
-        padding: 0 15px; /* Kurangi padding horizontal */
+        padding: 0 15px; 
     }
     .datetime-info {
-        display: none; /* Sembunyikan tanggal di layar kecil */
+        display: none;
     }
     .welcome-text {
-        font-size: 1.1rem; /* Kurangi ukuran teks */
+        font-size: 1.1rem; 
     }
 
-    /* 2. TABS (Menampilkan dan Menata Tabs) */
+    /* 2. TABS */
     .column-tabs-container {
         display: flex; /* Aktifkan tabs */
         justify-content: space-around;
         padding: 0 15px;
     }
 
-    /* 3. TASK BOARD (Mengubah Tata Letak Kanvas) */
+    /* 3. TASK BOARD  */
     .task-board {
-        flex-direction: column; /* Ubah dari baris ke kolom */
-        padding: 15px; /* Kurangi padding board */
+        flex-direction: column; 
+        padding: 15px; 
         gap: 0;
-        /* Penting: Set tinggi agar task-column bisa scroll */
         height: auto; 
         overflow-y: visible;
     }
     
-    /* 4. TASK COLUMN (Membuat Kolom Penuh dan Mengelola Tampilan) */
+    /* 4. TASK COLUMN */
     .task-column:not(.active) {
-        display: none !important; /* Paksa untuk Sembunyi */
+        display: none !important;
     }
     
     /* 5. TASK COLUMN - ATURAN PENAMPILAN (Aktif) */
@@ -724,8 +723,6 @@ body {
         margin-top: 15px;
         padding: 15px;
         height: auto; 
-        
-        /* Cukup display: flex, karena aturan :not(.active) sudah memegang kontrol penyembunyian */
         display: flex; 
         flex-direction: column; 
     }
@@ -733,7 +730,7 @@ body {
     /* Tampilan khusus untuk kolom pertama (To Do) */
     /* Saat login, defaultnya adalah To Do, jadi harus terlihat */
     .task-column.to-do {
-        display: flex; /* Secara default, tampilkan To Do */
+        display: flex; 
     }
     
     /* 5. ADD TASK */
