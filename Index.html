@@ -102,10 +102,17 @@
 
     <!-- MAIN CONTENT -->
     <main class="main-content">
+
+        <div class="column-tabs-container">
+            <button class="tab-button active" data-tab="to-do">To Do</button>
+            <button class="tab-button" data-tab="in-progress">In Progress</button> 
+            <button class="tab-button" data-tab="done">Done</button>
+        </div>
+
         <div class="task-board">
 
             <!-- SECTION 1 : TO DO -->
-            <section class="task-column to-do" >
+            <section class="task-column to-do active" >
                 <div id="addTaskBtn" class="add-task">
                     <h2>Add new task +</h2>
                 </div>
@@ -188,7 +195,7 @@
 
     <!-- FOOTER -->
     <footer class="footer">
-        <p>&copy; 2025 Leds Project. All rights reserved.</p>
+        <p class="footer-text">&copy; 2025 Leds Project. All rights reserved.</p>
     </footer>
 
 

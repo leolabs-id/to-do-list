@@ -697,6 +697,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // ======================================
 
+    // 5. DELEGASI EVENT GLOBAL (Semua interaksi Tombol Tabs)
+    document.addEventListener('click', (event) => {
+        const tabButton = event.target.closest('.tab-button');
+        
+        if (tabButton) {
+            const targetTabStatus = tabButton.dataset.tab;
+            
+            // 1. Kelola Status Active pada Tombol Tabs
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            tabButton.classList.add('active');
+            
+            // 2. Kelola Tampilan Kolom
+            document.querySelectorAll('.task-column').forEach(column => {
+                column.classList.remove('active');
+                
+                // Cek class kolom (todo, in-progress, done)
+                if (column.classList.contains(targetTabStatus)) {
+                    // Tambahkan class 'active' agar CSS menampilkannya
+                    column.classList.add('active'); 
+                }
+            });
+            
+            event.preventDefault();
+        }
+    });
+
+
     // ------------------------------------------------------------------
     // 5. DELEGASI EVENT GLOBAL (Semua interaksi Task Card)
     // ------------------------------------------------------------------

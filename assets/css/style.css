@@ -24,25 +24,16 @@ body {
 
 /* TAMPILAN MODAL BACKDROP (Latar Belakang Modal) */
 .modal-backdrop {
-    /* POSISI: Memaksa modal tetap di viewport (tidak ikut scroll) */
     position: fixed; 
     top: 0;
     left: 0;
-    
-    /* UKURAN: Menutupi seluruh layar */
     width: 100%;
     height: 100%;
-    
-    /* LAPISAN: Pastikan di atas elemen lain (z-index tinggi) */
     z-index: 1000;
-    
-    /* VISUAL: Latar belakang transparan gelap */
     background-color: rgba(0, 0, 0, 0.9); 
-    
-    /* TATA LETAK: Menggunakan Flexbox untuk menengahkan konten */
     display: flex;
-    justify-content: center; /* Tengah horizontal */
-    align-items: center;     /* Tengah vertikal */
+    justify-content: center;
+    align-items: center; 
 }
 
 /* TAMPILAN KONTEN MODAL */
@@ -52,13 +43,12 @@ body {
     border-radius: 12px;
     width: 90%;
     max-width: 400px; 
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); /* Bayangan yang jelas */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); 
     text-align: center;
 }
 
 /* CLASS UNTUK MENYEMBUNYIKAN ELEMEN */
 .hidden {
-    /* Kunci yang akan digunakan JavaScript untuk menyembunyikan elemen */
     display: none !important; 
 }
 
@@ -66,15 +56,15 @@ body {
 
 /* GAYA UNTUK MODAL TAMBAH TUGAS NEW TASK */
 .modal-content.new-task-modal-content {
-    max-width: 500px; /* Lebar lebih besar untuk form tugas */
+    max-width: 500px;
     padding: 30px;
-    text-align: left; /* Teks input normal */
+    text-align: left;
 }
 
 /* Tombol Kontrol (Simpan & Batal) */
 .form-controls {
     display: flex;
-    justify-content: flex-end; /* Tombol ke kanan */
+    justify-content: flex-end;
     gap: 10px;
     margin-top: 20px;
 }
@@ -144,7 +134,7 @@ body {
     font-size: 0.875rem;
     color: #e0e0e0;
     margin: 0;
-    line-height: 1; /* Mengatur jarak antara baris */
+    line-height: 1;
 }
 
 .user-avatar {
@@ -177,7 +167,7 @@ body {
 }
 
 
-/* Container Menu Global (Untuk position: relative) */
+/* Container Menu Global */
 .global-menu-container {
     position: relative;
 
@@ -269,6 +259,37 @@ body {
     overflow: hidden;
     
 }
+
+
+/* Tampilan Default: Tabs tersembunyi */
+.column-tabs-container {
+    display: none; 
+    width: 100%;
+    padding: 10px 0;
+    background-color: #ffffff;
+    border-bottom: 1px solid #ddd;
+}
+
+.tab-button {
+    flex: 1;
+    padding: 12px 10px;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #777;
+    transition: all 0.2s ease;
+}
+
+.tab-button.active {
+    color: #007bff;
+    border-bottom-color: #007bff;
+    font-weight: 700;
+}
+
+
 
 .task-board {
     max-width: 1200px;
@@ -498,7 +519,7 @@ body {
     z-index: 10; 
 }
 
-/* 1. PERBAIKAN: STYLING DASAR POPOVER (Mengelompokkan menu tugas DAN menu kolom) */
+/* 1. PERBAIKAN: STYLING DASAR POPOVER */
 .task-options-menu,
 .column-options-menu {
     position: absolute; 
@@ -654,4 +675,67 @@ body {
     background-color: #383535;
     border-radius: 0 0 8px 8px;
     flex-shrink: 0;
+}
+
+.footer-text {
+    margin: 0;
+    color: #e0e0e0;
+}
+
+
+@media (max-width: 768px) {
+    /* 1. HEADER (Membuat Header lebih ringkas) */
+    .header-container {
+        padding: 0 15px; /* Kurangi padding horizontal */
+    }
+    .datetime-info {
+        display: none; /* Sembunyikan tanggal di layar kecil */
+    }
+    .welcome-text {
+        font-size: 1.1rem; /* Kurangi ukuran teks */
+    }
+
+    /* 2. TABS (Menampilkan dan Menata Tabs) */
+    .column-tabs-container {
+        display: flex; /* Aktifkan tabs */
+        justify-content: space-around;
+        padding: 0 15px;
+    }
+
+    /* 3. TASK BOARD (Mengubah Tata Letak Kanvas) */
+    .task-board {
+        flex-direction: column; /* Ubah dari baris ke kolom */
+        padding: 15px; /* Kurangi padding board */
+        gap: 0;
+        /* Penting: Set tinggi agar task-column bisa scroll */
+        height: auto; 
+        overflow-y: visible;
+    }
+    
+    /* 4. TASK COLUMN (Membuat Kolom Penuh dan Mengelola Tampilan) */
+    .task-column {
+        flex: 0 0 100%; /* Buat setiap kolom mengambil lebar penuh */
+        max-width: 100%;
+        margin-top: 15px;
+        /* Aturan Awal: Sembunyikan semua kolom kecuali yang pertama (todo) */
+        display: none; 
+        padding: 15px;
+        height: auto; /* Menggunakan tinggi auto untuk scroll */
+    }
+    
+    /* Tampilkan Kolom yang Aktif */
+    .task-column.active {
+        display: flex !important; 
+    }
+    
+    /* Tampilan khusus untuk kolom pertama (To Do) */
+    /* Saat login, defaultnya adalah To Do, jadi harus terlihat */
+    .task-column.to-do {
+        display: flex; /* Secara default, tampilkan To Do */
+    }
+    
+    /* 5. ADD TASK */
+    .task-column.to-do .add-task {
+        order: -1; /* Pindahkan tombol 'Add Task' ke atas di kolom To Do */
+    }
 }
