@@ -759,22 +759,32 @@ document.addEventListener("DOMContentLoaded", () => {
             } else if (currentStatus === 'inprogress') {
                 newStatus = 'done';
             } else {
-                return; // Jika di done, biarkan tetap.
+                return; 
             }
 
-            // Panggil aksi & rendering
-            changeTaskStatus(taskId, newStatus); 
-            renderTaskBoard(); 
-            console.log(`➡️ Pindah Checkbox: ${taskId} dari ${currentStatus} ke ${newStatus}`);
-            return; 
+            // Menonaktifkan checkbox sementara untuk mencegah klik ganda/bug visual
+            target.disabled = true;
+            
+            // Jeda selama 1 detik sebelum pindah status
+            const DELAY_MS = 1000;
+            
+            setTimeout(() => {
+                // Panggil aksi & rendering setelah jeda
+                changeTaskStatus(taskId, newStatus); 
+                renderTaskBoard(); 
+                
+                // Catatan: target.disabled = false tidak diperlukan di sini karena renderTaskBoard()
+                // akan merender ulang seluruh kartu dengan status disabled/enabled yang benar.
+                console.log(`➡️ Pindah Checkbox Tertunda: ${taskId} dari ${currentStatus} ke ${newStatus}`);
+            }, DELAY_MS);
+
+            return;
         } 
         
         // 2. Logika Pindah Mundur (Jika Centang Dihilangkan)
         else if (!target.checked) {
             // Kita akan implementasikan ini setelah pindah maju berhasil.
             console.log("Checkbox dicentang kembali. Aksi pindah mundur dipersiapkan.");
-            
-            // Karena tidak ada perpindahan mundur yang diimplementasikan saat ini, tidak ada aksi.
         }
         
     }
