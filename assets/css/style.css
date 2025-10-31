@@ -713,19 +713,21 @@ body {
     }
     
     /* 4. TASK COLUMN (Membuat Kolom Penuh dan Mengelola Tampilan) */
-    .task-column {
-        flex: 0 0 100%; /* Buat setiap kolom mengambil lebar penuh */
-        max-width: 100%;
-        margin-top: 15px;
-        /* Aturan Awal: Sembunyikan semua kolom kecuali yang pertama (todo) */
-        display: none; 
-        padding: 15px;
-        height: auto; /* Menggunakan tinggi auto untuk scroll */
+    .task-column:not(.active) {
+        display: none !important; /* Paksa untuk Sembunyi */
     }
     
-    /* Tampilkan Kolom yang Aktif */
+    /* 5. TASK COLUMN - ATURAN PENAMPILAN (Aktif) */
     .task-column.active {
-        display: flex !important; 
+        flex: 0 0 100%;
+        max-width: 100%;
+        margin-top: 15px;
+        padding: 15px;
+        height: auto; 
+        
+        /* Cukup display: flex, karena aturan :not(.active) sudah memegang kontrol penyembunyian */
+        display: flex; 
+        flex-direction: column; 
     }
     
     /* Tampilan khusus untuk kolom pertama (To Do) */
