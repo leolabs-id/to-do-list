@@ -87,9 +87,14 @@
 
             <div class="global-actions">
                 <time id="tampilTanggal" datetime="2025-10-25" class="datetime-info">Senin, 25 Oktober 2025</time>
-                <nav class="main-menu-nav">
-                    <button class="menu-toggle">☰</button>
-                </nav>
+                <div class="global-menu-container">
+                    <button class="menu-toggle global-menu-btn">☰</button>
+                    
+                    <div id="global-reset-menu" class="global-options-menu hidden">
+                        <button type="button" class="menu-item action-reset-all">Reset/Hapus Semua Tugas</button>
+                        <button type="button" class="menu-item action-logout-reset">Hapus dan Keluar</button>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -99,14 +104,25 @@
     <main class="main-content">
         <div class="task-board">
 
-            <!-- sECTION 1 : TO DO -->
+            <!-- SECTION 1 : TO DO -->
             <section class="task-column to-do" >
                 <div id="addTaskBtn" class="add-task">
                     <h2>Add new task +</h2>
                 </div>
                 <!-- Kolom 1: To Do -->
                 <div class="task-list">
-                    <h2>To Do</h2>
+                    <div class="column-header" data-status="todo">
+                        <h2 class="column-title">To Do <span id="todoCount" class="task-count">(0)</span></h2>
+                        
+                        <div class="column-actions-menu-container">
+                            <button type="button" class="options-btn column-options-btn" data-toggle-menu="column-todo-menu">⋮</button>
+                            
+                            <div id="column-todo-menu" class="column-options-menu hidden">
+                                <button type="button" class="menu-item action-move-all" data-move-to="inprogress">Pindah Semua ke In Progress</button>
+                                <button type="button" class="menu-item action-delete-all">Hapus Semua Tugas</button>
+                            </div>
+                        </div>
+                    </div>
                     <div class="task-card-container" id="todo-tasks-container" data-status="todo">
                     <!-- Isi kartu tugas To Do List-->
                         
@@ -119,7 +135,19 @@
 
             <!-- Kolom 2: In Progress -->
             <section class="task-column in-progress">
-                <h2>In Progress</h2>
+                <div class="column-header" data-status="inprogress">
+                    <h2 class="column-title">In Progress <span id="inprogressCount" class="task-count">(0)</span></h2>
+                    
+                    <div class="column-actions-menu-container">
+                        <button type="button" class="options-btn column-options-btn" data-toggle-menu="column-inprogress-menu">⋮</button>
+                        
+                        <div id="column-inprogress-menu" class="column-options-menu hidden">
+                            <button type="button" class="menu-item action-move-all" data-move-to="todo">Pindah Semua ke To Do</button>
+                            <button type="button" class="menu-item action-move-all" data-move-to="done">Pindah Semua ke Done</button> 
+                            <button type="button" class="menu-item action-delete-all">Hapus Semua Tugas</button> 
+                        </div>
+                    </div>
+                </div>
                 <div class="task-card-container" id="inprogress-tasks-container" data-status="inprogress">
                 <!-- Isi kartu tugas In Progress -->
                 
@@ -132,7 +160,20 @@
 
             <!-- Kolom 3: Done -->
             <section class="task-column done">
-                <h2>Done</h2>
+                <div class="column-header" data-status="done">
+                    <h2 class="column-title">Done <span id="doneCount" class="task-count">(0)</span></h2>
+                    
+                    <div class="column-actions-menu-container">
+                        <button type="button" class="options-btn column-options-btn" data-toggle-menu="column-done-menu">⋮</button>
+                        
+                        <div id="column-done-menu" class="column-options-menu hidden">
+                            <button type="button" class="menu-item action-move-all" data-move-to="inprogress">Pindah Semua ke In Progress</button> 
+                            <button type="button" class="menu-item action-move-all" data-move-to="todo">Pindah Semua ke To Do</button>
+                            
+                            <button type="button" class="menu-item action-delete-all">Hapus Semua Tugas</button> 
+                        </div>
+                    </div>
+                </div>
                 <div class="task-card-container" id="done-tasks-container" data-status="done">
                 <!-- Isi kartu tugas Done -->
 

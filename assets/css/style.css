@@ -177,6 +177,87 @@ body {
 }
 
 
+/* Container Menu Global (Untuk position: relative) */
+.global-menu-container {
+    position: relative;
+
+}
+
+/* Tombol Toggle Menu Global */
+.global-menu-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem; 
+    cursor: pointer;
+    color: #333; 
+}
+
+.global-options-menu {
+    position: absolute; 
+    top: 100%; 
+    right: 0;
+    z-index: 2000; 
+    background-color: #ffffff; 
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    min-width: 220px; 
+    padding: 5px 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.global-options-menu .action-reset-all {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 10px 12px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    
+    
+    color: #dc3545; 
+    font-weight: 600; 
+    transition: background-color 0.1s ease;
+}
+
+.global-options-menu .action-reset-all:hover {
+    background-color: #fce8e8; 
+    color: #b02a37;
+}
+
+.global-options-menu .menu-item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 10px 12px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #333; 
+    transition: background-color 0.1s ease;
+}
+
+.global-options-menu .menu-item:hover {
+    background-color: #f0f0f0; 
+}
+
+
+.global-options-menu .action-logout-reset {
+    color: #cc0000; 
+    font-weight: 600;
+    border-top: 1px solid #eee; 
+}
+
+.global-options-menu .action-logout-reset:hover {
+    background-color: #fce8e8;
+    color: #990000;
+}
+
+
 /* Main Content */
 .main-content {
     background-color: #fafafa;
@@ -186,7 +267,6 @@ body {
     display: flex;
     min-height: 0;
     overflow: hidden;
-    
     
 }
 
@@ -215,6 +295,47 @@ body {
     min-height: 0;
     overflow: hidden;
 }
+
+
+.column-header {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.column-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #333; /* Warna teks sesuai tema Anda */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+}
+
+.task-count {
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: #777;
+}
+
+.column-actions-menu-container {
+    display: flex;
+    align-items: center;
+    position: relative; 
+    z-index: 15; 
+}
+
+.column-options-btn {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: #999;
+    padding: 0;
+}
+
 
 /* TAMPILAN TOMBOL TAMBAH TUGAS */
 .add-task {
@@ -289,19 +410,14 @@ body {
 }
 
 .task-title {
-    /* Gaya Teks (Mirip H3) */
     font-size: 1rem;
     font-weight: 600;
     color: #333;
     margin: 0;
-    
-    /* Hapus Gaya Input Bawaan */
     background: none; 
     border: none; 
     padding: 0; 
     outline: none;
-    
-    /* Kunci Flexbox: Memastikan judul mengambil ruang yang tersedia */
     flex-grow: 1; 
     width: 100%; 
     min-width: 0;
@@ -311,7 +427,6 @@ body {
 }
 
 .task-title:focus {
-    /* Pastikan outline hilang */
     outline: none; 
     box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1); 
     padding-bottom: 2px;
@@ -328,14 +443,10 @@ body {
     padding: 0; 
     resize: none;
     outline: none;
-    
-    /* Kunci Scrolling & Ukuran */
     min-height: 40px; 
     max-height: 5em; 
     overflow-y: hidden;
     transition: all 0.2s ease;
-    
-    /* Memastikan ia mengambil lebar penuh */
     width: 100%;
     box-sizing: border-box; 
     line-height: 1.4;
@@ -350,7 +461,7 @@ body {
 .card-header,
 .card-footer {
     display: flex;
-    justify-content: space-between; /* Menyebar elemen ke kiri dan kanan */
+    justify-content: space-between; 
     align-items: center;
 }
 
@@ -361,10 +472,10 @@ body {
 .header-actions {
     display: flex;
     align-items: center;
-    gap: 8px; /* Jarak antara ikon dan checkbox */
+    gap: 8px;
 }
 
-/* Checkbox Styling (Default browser, tapi bisa diatur ukurannya) */
+/* Checkbox Styling */
 .task-checkbox {
     width: 18px;
     height: 18px;
@@ -381,20 +492,18 @@ body {
     padding: 0;
 }
 
-/* CONTAINER MENU (Kunci Posisi) */
+/* CONTAINER MENU */
 .task-options-menu-container {
-    position: relative; /* Kunci 1: Memposisikan menu absolut di dalamnya */
-    z-index: 10; /* Pastikan menu berada di atas elemen lain dalam kartu */
+    position: relative;
+    z-index: 10; 
 }
 
-/* GAYA DROPDOWN MENU ITU SENDIRI */
-.task-options-menu {
-    /* Kunci 2: Membuat menu mengambang */
+/* 1. PERBAIKAN: STYLING DASAR POPOVER (Mengelompokkan menu tugas DAN menu kolom) */
+.task-options-menu,
+.column-options-menu {
     position: absolute; 
-    top: 100%; /* Tempatkan menu tepat di bawah tombol ⋮ */
-    right: 0; /* Tempatkan menu menempel di sisi kanan (tepat di bawah ⋮) */
-    
-    /* Styling Visual */
+    top: 100%; 
+    right: 0; 
     background-color: #ffffff; 
     border: 1px solid #ddd;
     border-radius: 6px;
@@ -403,8 +512,9 @@ body {
     padding: 5px 0;
 }
 
-/* Styling Item di Dalam Menu */
-.task-options-menu .menu-item {
+/* 2. PERBAIKAN: STYLING ITEM MENU */
+.task-options-menu .menu-item,
+.column-options-menu .menu-item {
     display: block;
     width: 100%;
     text-align: left;
@@ -417,46 +527,50 @@ body {
     transition: background-color 0.1s ease;
 }
 
-.task-options-menu .menu-item:hover {
-    background-color: #f0f0f0; /* Efek highlight saat di-hover */
+/* HOVER ITEM */
+.task-options-menu .menu-item:hover,
+.column-options-menu .menu-item:hover {
+   color: #0056b3;
+   background-color: #f0f0f0;
 }
 
-/* Opsi Hapus (Visual Penekanan) */
-.task-options-menu .action-delete {
-    color: #dc3545; /* Warna merah untuk aksi hapus */
-    font-weight: 500; 
+/* DELETE ACTION */
+.task-options-menu .action-delete,
+.column-options-menu .action-delete-all {
+   color: #dc3545; 
+   font-weight: 500; 
 }
 
-.task-options-menu .action-delete:hover {
-    color: #dc3545; /* Warna merah untuk aksi hapus */
+.task-options-menu .action-delete:hover,
+.column-options-menu .action-delete-all:hover {
+    color: #dc3545; 
     background-color: #fceeef;
     font-weight: 700; 
 }
 
-/* Styling Khusus untuk Opsi Pindah (action-move) */
-.task-options-menu .action-move {
-    /* Gaya Teks: Pastikan teksnya terlihat normal/tegas */
-    color: #007bff; /* Warna biru untuk aksi pindah (mirip link/primary action) */
-    font-weight: 500; /* Sedikit lebih tebal */
+/* MOVE ACTION */
+.task-options-menu .action-move,
+.column-options-menu .action-move-all {
+    color: #007bff;
+    font-weight: 500; 
 }
 
-/* Efek Hover: Membuat Teks Tebal (fontWeight: bold) */
-.task-options-menu .action-move:hover {
-    font-weight: 700; /* Membuat teks lebih tebal saat hover */
-    background-color: #e6f7ff; /* Latar belakang biru sangat muda */
-    color: #0056b3; /* Biru lebih gelap */
+.task-options-menu .action-move:hover,
+.column-options-menu .action-move-all:hover {
+    font-weight: 700; 
+    background-color: #e6f7ff; 
+    color: #0056b3; 
 }
 
-/* Efek Active: Membuat Teks Sedikit Pudar (Saat Diklik) */
-.task-options-menu .menu-item:active {
-    /* Menerapkan efek pudar/tertekan pada SEMUA menu item */
-    opacity: 0.7; /* Membuat teks dan background terlihat pudar */
-    transform: scale(0.99); /* Efek visual tertekan yang halus */
-    transition: opacity 0.05s ease, transform 0.05s ease; /* Transisi yang sangat cepat */
+/* ACTIVE STATE */
+.task-options-menu .menu-item:active,
+.column-options-menu .menu-item:active {
+    opacity: 0.7; 
+    transform: scale(0.99); 
+    transition: opacity 0.05s ease, transform 0.05s ease; 
 }
 
-/* FOOTER TANGGAL DI KARTU TUGAS */
-/* CLASS BARU: Menyembunyikan input secara visual, tetapi tetap berfungsi */
+
 .visually-hidden {
     position: absolute;
     width: 1px;
@@ -464,7 +578,7 @@ body {
     padding: 0;
     margin: -1px;
     overflow: hidden;
-    clip: rect(0, 0, 0, 0); /* Cara lama, aman */
+    clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
 }
@@ -472,7 +586,7 @@ body {
 /* CONTAINER (Membungkus span dan input) */
 .task-date-picker-container {
     display: inline-block;
-    position: relative; /* Kunci: Mengunci posisi input tersembunyi */
+    position: relative; 
 }
 
 /* TAMPILAN SPAN (Yang dilihat pengguna) */
@@ -490,8 +604,6 @@ body {
 }
 
 
-
-
 /* DAFTAR PRIORITAS DI KARTU TUGAS */
 .task-priority-select {
     /* Gaya Dasar Badge */
@@ -501,35 +613,35 @@ body {
     border-radius: 4px;
     text-transform: uppercase;
     text-align: center;
-    
-    /* Hapus/Minimalisir Gaya Default Browser */
-    appearance: none; /* Kunci: Menghapus panah default pada browser */
+    appearance: none; 
     -webkit-appearance: none;
     -moz-appearance: none;
     border: none;
     cursor: pointer;
     outline: none;
-    
-    /* Jaga lebar agar tidak terlalu besar */
     max-width: 150px; 
 }
 
-/* Contoh Warna Prioritas (Sesuai Gambar) */
 .high-priority {
-    background-color: #ffe5e5; /* Background merah muda */
-    color: #d9534f; /* Teks merah */
+    background-color: #ffe5e5; 
+    color: #d9534f; 
 }
 
 .medium-priority {
-    background-color: #fff3cd; /* Background kuning muda */
-    color: #f0ad4e; /* Teks kuning/oranye */
+    background-color: #fff3cd; 
+    color: #f0ad4e; 
 }
 
 .low-priority {
-    background-color: #d9edf7; /* Background biru muda */
-    color: #5bc0de; /* Teks biru */
+    background-color: #d9edf7; 
+    color: #5bc0de; 
 }
 
+
+.task-date.disabled {
+    cursor: default; 
+    opacity: 0.6;
+}
 
 
 .footer {
