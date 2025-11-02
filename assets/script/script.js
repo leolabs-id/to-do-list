@@ -11,8 +11,6 @@ const taskBoardData = {
     done: doneData
 }
 
-
-
 /**
  * Menyimpan seluruh task board data ke LocalStorage.
  * Dipanggil SETELAH setiap operasi CRUD (Create, Update, Delete).
